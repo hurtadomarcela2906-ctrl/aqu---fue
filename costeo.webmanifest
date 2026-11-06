@@ -8,8 +8,8 @@
   "scope": "costeo.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FBF6EF",
-  "theme_color": "#8B1E1E",
+  "background_color": "#FFF7F3",
+  "theme_color": "#C8202B",
   "icons": [
     {
       "src": "costeo-192.png",

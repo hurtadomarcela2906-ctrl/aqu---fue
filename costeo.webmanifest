@@ -1,0 +1,33 @@
+{
+  "id": "costeo",
+  "name": "Aquí Fue · Costeo",
+  "short_name": "Costeo",
+  "description": "Aquí Fue: costeo",
+  "lang": "es-CO",
+  "start_url": "costeo.html",
+  "scope": "costeo.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF6EF",
+  "theme_color": "#8B1E1E",
+  "icons": [
+    {
+      "src": "costeo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "costeo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "costeo-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

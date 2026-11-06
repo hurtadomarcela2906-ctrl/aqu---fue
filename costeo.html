@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8B1E1E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Costeo">
+<link rel="manifest" href="costeo.webmanifest">
+<link rel="icon" type="image/png" href="costeo-192.png">
+<link rel="apple-touch-icon" href="apple-touch-costeo.png">
+<script>(function () { var u = null; try { u = localStorage.getItem('aquifue_api_costeo'); } catch (e) { } if (!u) { document.documentElement.style.display = 'none'; location.replace('conectar.html?app=costeo'); u = ''; } window.CAJA_API = u; })();</script>
+
+<title>Aquí Fue</title>
+<style>
+:root{--bg:#FBF6EF;--card:#FFFFFF;--ink:#222222;--muted:#6B6B6B;--line:#E7DFD2;--red:#8B1E1E;--gold:#C98A1B;--ok:#1E7D32;--ok-s:#E3F2E5;--bad:#B00020;--bad-s:#FBE4E7;--warn:#8A5200;--warn-s:#FFF0D6;--chip:#F3ECE2;}
+@media (prefers-color-scheme: dark){:root{--bg:#151111;--card:#211B1B;--ink:#F3ECE6;--muted:#B9ADA5;--line:#3A302F;--red:#E07272;--gold:#E0A33A;--ok:#5BC06A;--ok-s:#1C2E1F;--bad:#FF8595;--bad-s:#3A1A20;--warn:#EBB050;--warn-s:#33260F;--chip:#2B2322;}}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px}
+.top{background:#8B1E1E;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+.logobox{display:inline-flex;background:#fff;border-radius:10px;padding:3px 10px}
+.logobox img{height:38px;width:auto;display:block}
+.tt{flex:1;font-weight:700}
+.tt small{display:block;font-weight:400;opacity:.85;font-size:12px}
+main{max-width:860px;margin:0 auto;padding:14px}
+h2{font:700 21px Georgia,serif;margin:6px 0 12px}
+h3{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px}
+.card.warn{background:var(--warn-s);border-color:var(--gold)}
+.card.bad{background:var(--bad-s);border-color:var(--bad)}
+.card.ok{background:var(--ok-s);border-color:var(--ok)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:640px){.grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.g4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi .v{font:700 20px Georgia,serif;margin-top:2px;word-break:break-word}
+.kpi .s{font-size:12px;color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.sp{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.muted{color:var(--muted);font-size:13px}
+.hint{color:var(--muted);font-size:13px;margin:4px 0 8px}
+.pos{color:var(--ok)}.neg{color:var(--bad)}
+.btn{background:var(--chip);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font:600 14px system-ui,sans-serif;cursor:pointer;min-height:42px}
+.btn.pri{background:var(--red);border-color:var(--red);color:#fff}
+.btn.danger{background:var(--bad-s);border-color:var(--bad);color:var(--bad)}
+.btn.sm{min-height:34px;padding:6px 10px;font-size:13px}
+.btn.block{display:block;width:100%}
+.btn[disabled]{opacity:.5;cursor:default}
+label{display:block;font-size:12px;color:var(--muted);margin:8px 0 3px}
+input,select,textarea{width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 11px;font:500 15px system-ui,sans-serif;min-height:42px}
+input[disabled],select[disabled]{opacity:.6}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item .t{font-weight:600}
+.item .s{font-size:12px;color:var(--muted)}
+.item .r{text-align:right}
+.prod{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.prod .nm{flex:1;min-width:0;font-weight:600}
+.prod .nm small{display:block;font-weight:400;color:var(--muted)}
+.qty{width:64px;text-align:center;padding:8px 4px}
+.step{width:42px;height:42px;padding:0;font-size:20px}
+.tabsub{display:flex;gap:6px;margin:0 0 12px;overflow-x:auto}
+.tabsub button{flex:1 0 auto;white-space:nowrap}
+.tabsub button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.daygrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.daygrid .dh{text-align:center;font:600 11px system-ui,sans-serif;color:var(--muted)}
+.dbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 0;font:600 14px system-ui,sans-serif;cursor:pointer}
+.dbtn.cerr{background:var(--ok-s);border-color:var(--ok);color:var(--ok)}
+.dbtn.abi{background:var(--warn-s);border-color:var(--gold);color:var(--warn)}
+.dbtn.hoy{box-shadow:inset 0 0 0 2px var(--gold)}
+.dbtn.sel{background:var(--red);border-color:var(--red);color:#fff}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:middle;background:var(--chip);color:var(--muted)}.pill.ok{background:var(--ok-s);color:var(--ok)}.pill.bad{background:var(--bad-s);color:var(--bad)}.pill.warn{background:var(--warn-s);color:var(--warn)}
+.bar{height:12px;border-radius:99px;background:var(--line);overflow:hidden;margin:8px 0}
+.bar>i{display:block;height:100%;background:var(--gold)}
+.bar>i.ok{background:var(--ok)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-size:12px;color:var(--muted);font-weight:600}
+.tw{overflow-x:auto}
+tr.tot td{font-weight:700}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;z-index:6;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;background:none;border:0;color:var(--muted);padding:12px 2px;font:600 12px system-ui,sans-serif;cursor:pointer}
+nav button[aria-current="true"]{color:var(--red);box-shadow:inset 0 3px 0 var(--red)}
+.center{max-width:420px;margin:30px auto;padding:0 14px}
+.modalbg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--card);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:18px 18px 0 0;padding:16px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:96px;background:#222;color:#fff;padding:10px 16px;border-radius:99px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="top"><span class="logobox"><img src="data:image/png;base64,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" alt="Aquí Fue"></span><div class="tt">Sistema de costeo<small id="sub">Cargando...</small></div></div>
+<div id="app"></div>
+<div id="modal"></div>
+<div id="modal2"></div>
+<div id="toast"></div>
+<script>
+var S = { hTipo: 'prod', hCols: null, hPrevProd: null, hMes: '', hAnio: '', histPrevYm: '', hist: null, histPrev: null, histTexto: '', histNota: '', histCargando: false, sync: null, cajaEst: null, cajaCargando: false, pf: null, pfYm: null, pfCargando: false, token: null, est: null, cat: null, tab: 'inicio', sub: 'insumos', fecha: null, dia: null, pend: {}, sucio: false, ym: null, mes: null, ver: 0, edit: null };
+var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+var DIAS_L = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+var memTok = null;
+
+function $(s) { return document.querySelector(s); }
+function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function num(v) { var n = Number(String(v === null || v === undefined ? '' : v).replace(',', '.')); return isFinite(n) ? n : 0; }
+function fmt(n) { n = Math.round(Number(n) || 0); var s = String(Math.abs(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); return (n < 0 ? '-$' : '$') + s; }
+function pct(n) { return (isFinite(n) ? (n * 100).toFixed(1).replace('.', ',') : '0,0') + '%'; }
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function parseYmd(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+function hoyNeg() { var h = S.cat ? S.cat.params.horaCambioDia : 4; return ymd(new Date(Date.now() - h * 3600000)); }
+function fechaLarga(s) { var d = parseYmd(s); return DIAS_L[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()]; }
+function tituloMes(ym) { return MESES[+ym.slice(5) - 1] + ' ' + ym.slice(0, 4); }
+function mesMas(ym, n) { var y = +ym.slice(0, 4), m = +ym.slice(5) - 1 + n; var d = new Date(y, m, 1); return d.getFullYear() + '-' + pad(d.getMonth() + 1); }
+
+function toast(t) { var el = $('#toast'); el.textContent = t; el.className = 'on'; clearTimeout(toast.t); toast.t = setTimeout(function () { el.className = ''; }, 2600); }
+function guardarTok(t) { memTok = t; try { window.localStorage.setItem('af_tok', t || ''); } catch (e) {} }
+function leerTok() { try { var t = window.localStorage.getItem('af_tok'); if (t) { return t; } } catch (e) {} return memTok; }
+
+function api(fn, args) {
+  return new Promise(function (resolve, reject) {
+    var a = args || [];
+    function fin(r) {
+      if (r && r.ok) { resolve(r.val); return; }
+      var e = new Error((r && r.err) || 'Error desconocido');
+      e.sesion = !!(r && r.sesion === false);
+      reject(e);
+    }
+    if (window.CAJA_API) {
+      fetch(window.CAJA_API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, token: S.token, args: a }) })
+        .then(function (r) { return r.json(); }).then(fin)
+        .catch(function () { reject(new Error('No hay conexión con el servidor.')); });
+    } else if (window.google && google.script && google.script.run) {
+      google.script.run.withSuccessHandler(fin).withFailureHandler(function (e) { reject(new Error((e && e.message) || 'Error de conexión.')); }).dispatch(fn, S.token, a);
+    } else {
+      reject(new Error('No hay conexión con el servidor.'));
+    }
+  });
+}
+
+function manejarError(e) {
+  if (e && e.sesion) { S.token = null; guardarTok(''); pantallaLogin('Tu sesión venció. Entra de nuevo.'); return; }
+  toast((e && e.message) || 'Algo salió mal.');
+}
+
+function pintar(h) { $('#app').innerHTML = h; }
+
+function iniciar() {
+  S.token = leerTok();
+  api('estado', []).then(function (est) {
+    S.est = est;
+    $('#sub').textContent = est.negocio || 'Aquí Fue';
+    if (!est.instalado) { pantallaAviso('Falta un paso', 'En Apps Script, ejecuta la función instalar y vuelve a abrir esta página.'); }
+    else if (!est.tieneClave) { pantallaCrear(); }
+    else if (S.token) { cargarInicial(); }
+    else { pantallaLogin(''); }
+  }).catch(function (e) { pantallaAviso('No pude conectar', e.message); });
+}
+
+function pantallaAviso(t, m) { pintar('<div class="center"><div class="card"><h2>' + esc(t) + '</h2><p>' + esc(m) + '</p><button class="btn pri block" data-act="reintentar">Reintentar</button></div></div>'); }
+
+function pantallaLogin(msg) {
+  $('#sub').textContent = 'Entrar';
+  pintar('<div class="center"><div class="card"><h2>Entrar</h2>' + (msg ? '<p class="hint">' + esc(msg) + '</p>' : '') + '<label>Tu clave</label><input id="lc" type="password" autocomplete="current-password"><div style="height:10px"></div><button class="btn pri block" data-act="entrar">Entrar</button></div></div>');
+}
+
+function pantallaCrear() {
+  $('#sub').textContent = 'Crear clave';
+  pintar('<div class="center"><div class="card"><h2>Crea tu clave</h2><p class="hint">Esta clave protege tus datos. Mínimo 6 caracteres. Guárdala en un lugar seguro.</p><label>Clave nueva</label><input id="c1" type="password" autocomplete="new-password"><label>Repite la clave</label><input id="c2" type="password" autocomplete="new-password"><div style="height:10px"></div><button class="btn pri block" data-act="crear">Crear clave y entrar</button></div></div>');
+}
+
+function cargarInicial() {
+  return api('catalogo', []).then(function (c) {
+    S.cat = c; S.ver = c.version;
+    S.fecha = hoyNeg(); S.ym = S.fecha.slice(0, 7);
+    return cargarMes(S.ym);
+  }).then(function () { pintarApp(); sincronizarAlAbrir(false); }).catch(manejarError);
+}
+
+function cargarMes(ym) { return api('mes', [ym]).then(function (m) { S.mes = m; S.ym = ym; }); }
+
+function recargarCat() { return api('catalogo', []).then(function (c) { S.cat = c; S.ver = c.version; }); }
+
+var TABS = [['inicio', 'Inicio'], ['dia', 'Día'], ['catalogo', 'Catálogo'], ['costeo', 'Costeo'], ['ajustes', 'Ajustes']];
+
+function pintarApp() {
+  $('#sub').textContent = S.cat.params.negocio;
+  pintar('<main id="vista"></main><nav>' + TABS.map(function (t) { return '<button data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</nav>');
+  irA(S.tab);
+}
+
+function irA(tab) {
+  S.tab = tab;
+  $$('nav button').forEach(function (b) { b.setAttribute('aria-current', b.getAttribute('data-tab') === tab ? 'true' : 'false'); });
+  var f = { inicio: vistaInicio, dia: vistaDia, catalogo: vistaCatalogo, costeo: vistaCosteo, ajustes: vistaAjustes }[tab];
+  if (tab === 'dia' && (!S.dia || S.ym !== S.dia.fecha.slice(0, 7))) {
+    abrirDia(S.dia ? S.dia.fecha : S.fecha);
+    return;
+  }
+  $('#vista').innerHTML = f();
+  window.scrollTo(0, 0);
+  if (tab === 'dia') { refrescarDia(); }
+}
+
+function repintar() {
+  var y = window.scrollY;
+  var f = { inicio: vistaInicio, dia: vistaDia, catalogo: vistaCatalogo, costeo: vistaCosteo, ajustes: vistaAjustes }[S.tab];
+  $('#vista').innerHTML = f();
+  window.scrollTo(0, y);
+  if (S.tab === 'dia') { refrescarDia(); }
+}
+
+function agregar(m) {
+  var a = { dias: 0, cerrados: 0, ventas: 0, extra: 0, dom: 0, cv: 0, mo: 0, pagoAux: 0, pagoDomi: 0, bono: 0, gastosEf: 0, uds: 0, porProd: {} };
+  m.dias.forEach(function (d) {
+    a.dias++;
+    if (d.estado === 'Cerrado') { a.cerrados++; }
+    a.ventas += d.ventasProd + d.extra; a.extra += d.extra; a.dom += d.dom; a.cv += d.cv; a.mo += d.mo;
+    a.pagoAux += d.pagoAux; a.pagoDomi += d.pagoDomi; a.bono += d.bono; a.gastosEf += d.gastosEf;
+    for (var k in d.u) { a.uds += d.u[k]; a.porProd[k] = (a.porProd[k] || 0) + d.u[k]; }
+  });
+  return a;
+}
+
+function moEsperada() { var t = 0; S.cat.productos.forEach(function (p) { if (p.activo) { t += p.esperadas * p.mo; } }); return t; }
+
+function turnosAuxMes(ym) {
+  var y = +ym.slice(0, 4), mo = +ym.slice(5) - 1, n = new Date(y, mo + 1, 0).getDate(), t = 0;
+  for (var i = 1; i <= n; i++) { t += S.cat.params.turnosAux[new Date(y, mo, i).getDay()]; }
+  return t;
+}
+
+function turnosDomiMes(ym) {
+  var y = +ym.slice(0, 4), mo = +ym.slice(5) - 1, n = new Date(y, mo + 1, 0).getDate(), t = 0;
+  for (var i = 1; i <= n; i++) { t += S.cat.params.turnosDomi[new Date(y, mo, i).getDay()]; }
+  return t;
+}
+
+function tarjetaFijos(a) {
+  var fijos = S.cat.fijosTotal, deja = a.ventas - a.cv - a.mo;
+  var h = '<div class="card"><h3>Lo que dejan las ventas para los gastos fijos</h3>';
+  if (a.dias === 0) {
+    h += '<p class="hint" style="margin-bottom:0">Aún no hay días registrados en este mes.</p>';
+  } else {
+    var pr = fijos > 0 ? deja / fijos : 0;
+    h += '<div class="grid"><div><div class="muted">Dejado hasta hoy (ventas − materiales − mano de obra de las recetas)</div><div style="font:700 20px Georgia,serif">' + fmt(deja) + '</div></div><div><div class="muted">Gastos fijos del mes</div><div style="font:700 20px Georgia,serif">' + fmt(fijos) + '</div></div></div>';
+    h += '<div class="bar"><i class="' + (pr >= 1 ? 'ok' : '') + '" style="width:' + Math.max(0, Math.min(100, pr * 100)).toFixed(0) + '%"></i></div>';
+    h += '<p style="margin:0">' + (pr >= 1 ? 'Ya cubriste los gastos fijos del mes y sobran <b>' + fmt(deja - fijos) + '</b>.' : 'Llevas el <b>' + pct(Math.max(0, pr)) + '</b> de los gastos fijos del mes; faltan <b>' + fmt(fijos - deja) + '</b>.') + '</p>';
+  }
+  return h + '</div>';
+}
+
+function tarjetaMO(a, ym) {
+  var p = S.cat.params;
+  var dif = a.mo - a.pagoAux;
+  var h = '<div class="card ' + (a.dias === 0 ? '' : (dif >= 0 ? 'ok' : 'warn')) + '"><h3>Mano de obra de las recetas vs pago de la auxiliar</h3>';
+  if (a.dias === 0) {
+    h += '<p class="hint">Aún no hay días registrados en este mes.</p>';
+  } else {
+    h += '<div class="grid"><div><div class="muted">Mano de obra que traen las recetas vendidas</div><div style="font:700 20px Georgia,serif">' + fmt(a.mo) + '</div></div><div><div class="muted">Pagado a la auxiliar de cocina</div><div style="font:700 20px Georgia,serif">' + fmt(a.pagoAux) + '</div></div></div>';
+    h += '<div class="bar"><i class="' + (dif >= 0 ? 'ok' : '') + '" style="width:' + Math.min(100, a.pagoAux > 0 ? a.mo / a.pagoAux * 100 : 100).toFixed(0) + '%"></i></div>';
+    h += '<p style="margin:0">' + (dif >= 0 ? 'Las recetas cubren el pago de la auxiliar y sobran <b>' + fmt(dif) + '</b>.' : 'Las recetas todavía no cubren el pago de la auxiliar: faltan <b>' + fmt(-dif) + '</b>.') + '</p>';
+  }
+  var esp = moEsperada(), prog = turnosAuxMes(ym) * p.turnoAux;
+  h += '<p class="hint" style="margin-top:10px">Mes completo con tus ventas esperadas: las recetas aportan ' + fmt(esp) + ' y la auxiliar costaría ' + fmt(prog) + ' (' + turnosAuxMes(ym) + ' turnos). ' + (esp >= prog ? 'Cubre.' : 'Faltarían ' + fmt(prog - esp) + '.') + '</p></div>';
+  return h;
+}
+
+function vistaInicio() {
+  var a = agregar(S.mes || { dias: [] }), h = '';
+  h += '<h2>Hola</h2><div id="estadoCajaBox">' + htmlEstadoCaja() + '</div>';
+  h += '<div class="card"><div class="row sp"><button class="btn sm" data-act="mprev">◀</button><b>' + esc(tituloMes(S.ym)) + '</b><button class="btn sm" data-act="mnext">▶</button></div></div>';
+  var hoy = hoyNeg();
+  var dh = null;
+  (S.mes ? S.mes.dias : []).forEach(function (d) { if (d.fecha === hoy) { dh = d; } });
+  h += '<div class="card"><h3>Hoy, ' + esc(fechaLarga(hoy)) + '</h3><p class="hint">' + (dh ? 'El día está ' + dh.estado.toLowerCase() + '.' : 'Aún no registras ventas de hoy.') + '</p><button class="btn pri block" data-act="irHoy">' + (dh && dh.estado === 'Cerrado' ? 'Ver el día de hoy' : 'Registrar el día de hoy') + '</button></div>';
+  var sinCerrar = (S.mes ? S.mes.dias : []).filter(function (d) { return d.estado !== 'Cerrado' && d.fecha < hoy; });
+  if (sinCerrar.length) { h += '<div class="card warn"><b>Tienes ' + sinCerrar.length + (sinCerrar.length === 1 ? ' día sin cerrar' : ' días sin cerrar') + '</b><p class="hint" style="margin-bottom:0">' + sinCerrar.map(function (d) { return d.fecha.slice(8); }).join(', ') + ' de ' + esc(MESES[+S.ym.slice(5) - 1]) + '. Toca el día en la pestaña Día para cerrarlo.</p></div>'; }
+  h += '<div class="grid g4"><div class="kpi"><div class="l">Ventas del mes</div><div class="v">' + fmt(a.ventas) + '</div><div class="s">' + a.dias + (a.dias === 1 ? ' día' : ' días') + '</div></div>';
+  h += '<div class="kpi"><div class="l">Costo de insumos</div><div class="v">' + fmt(a.cv) + '</div></div>';
+  h += '<div class="kpi"><div class="l">Margen sobre insumos</div><div class="v ' + (a.ventas - a.cv >= 0 ? 'pos' : 'neg') + '">' + fmt(a.ventas - a.cv) + '</div><div class="s">' + pct(a.ventas > 0 ? (a.ventas - a.cv) / a.ventas : 0) + '</div></div>';
+  h += '<div class="kpi"><div class="l">Domicilios cobrados</div><div class="v">' + fmt(a.dom) + '</div><div class="s">bono pagado ' + fmt(a.bono) + '</div></div></div><div style="height:12px"></div>';
+  h += tarjetaMO(a, S.ym);
+  h += tarjetaFijos(a);
+  var dias = (S.mes ? S.mes.dias : []).slice().reverse().slice(0, 10);
+  h += '<div class="card"><h3>Últimos días</h3>';
+  if (!dias.length) { h += '<p class="hint">Sin días registrados.</p>'; }
+  dias.forEach(function (d) { h += '<div class="item" data-act="pickDay" data-date="' + d.fecha + '" style="cursor:pointer"><div class="grow"><div class="t">' + esc(fechaLarga(d.fecha)) + '</div><div class="s">' + d.estado + '</div></div><div class="r"><b>' + fmt(d.ventasProd + d.extra) + '</b></div></div>'; });
+  return h + '</div>';
+}
+
+function borradorDe(r, fecha) {
+  if (S.pend[fecha]) { return S.pend[fecha]; }
+  if (r.existe) {
+    return { fecha: fecha, estado: r.estado, existe: true, fuente: r.fuente || '', manual: !!r.manual, base: r.base, u: JSON.parse(JSON.stringify(r.u || {})), extra: r.extra, dom: r.dom, digital: r.digital, aux: r.aux, domi: r.domi, nota: r.nota, contado: r.contado, motivo: r.motivo, gastos: (r.gastos || []).map(function (g) { return { categoria: g.categoria, concepto: g.concepto, valor: g.valor, medio: g.medio }; }) };
+  }
+  var dow = parseYmd(fecha).getDay(), p = S.cat.params;
+  return { fecha: fecha, estado: 'Nuevo', existe: false, base: p.baseCaja, u: {}, extra: 0, dom: 0, digital: 0, aux: p.turnosAux[dow], domi: p.turnosDomi[dow], nota: '', contado: null, motivo: '', gastos: [] };
+}
+
+function guardarPendiente() {
+  if (S.dia && S.sucio && S.dia.estado !== 'Cerrado') { S.pend[S.dia.fecha] = S.dia; }
+  else if (S.dia) { delete S.pend[S.dia.fecha]; }
+}
+
+function abrirDia(fecha) {
+  guardarPendiente();
+  var ym = fecha.slice(0, 7);
+  var p1 = ym !== S.ym ? cargarMes(ym) : Promise.resolve();
+  return p1.then(function () { return api('dia', [fecha]); }).then(function (r) {
+    S.fecha = fecha; S.dia = borradorDe(r, fecha); S.sucio = !!S.pend[fecha];
+    if (S.tab !== 'dia') { S.tab = 'dia'; $$('nav button').forEach(function (b) { b.setAttribute('aria-current', b.getAttribute('data-tab') === 'dia' ? 'true' : 'false'); }); }
+    $('#vista').innerHTML = vistaDia();
+    refrescarDia();
+  }).catch(manejarError);
+}
+
+function calcDia(d) {
+  var c = S.cat, p = c.params, vp = 0, cv = 0, mo = 0, uds = 0;
+  c.productos.forEach(function (pr) {
+    var q = num(d.u[pr.id]);
+    if (q > 0) { vp += q * pr.precio; cv += q * pr.mp; mo += q * pr.mo; uds += q; }
+  });
+  var extra = num(d.extra), dom = num(d.dom);
+  cv += extra * p.costoExtraPct / 100;
+  var cobrado = vp + extra + dom, digital = num(d.digital), efv = cobrado - digital;
+  var pagoAux = Math.round(num(d.aux)) * p.turnoAux, pagoDomi = Math.round(num(d.domi)) * p.turnoDomi, bono = dom * p.bonoDomiciliosPct / 100;
+  var gef = 0;
+  d.gastos.forEach(function (g) { if (g.medio === 'Efectivo') { gef += num(g.valor); } });
+  var esperado = num(d.base) + efv - gef - pagoAux - pagoDomi - bono;
+  return { vp: vp, extra: extra, dom: dom, cobrado: cobrado, digital: digital, efv: efv, cv: cv, mo: mo, uds: uds, pagoAux: pagoAux, pagoDomi: pagoDomi, bono: bono, gef: gef, esperado: esperado };
+}
+
+function calendario(fecha) {
+  var ym = fecha.slice(0, 7), y = +ym.slice(0, 4), m = +ym.slice(5), n = new Date(y, m, 0).getDate();
+  var off = (new Date(y, m - 1, 1).getDay() + 6) % 7, hoy = hoyNeg();
+  var mapa = {};
+  if (S.mes && S.ym === ym) { S.mes.dias.forEach(function (d) { mapa[d.fecha] = d.estado; }); }
+  var h = '<div class="row sp" style="margin-bottom:8px"><button class="btn sm" data-act="dmprev">◀</button><b>' + esc(tituloMes(ym)) + '</b><button class="btn sm" data-act="dmnext">▶</button></div>';
+  h += '<div class="daygrid">' + ['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(function (x) { return '<span class="dh">' + x + '</span>'; }).join('');
+  for (var i = 0; i < off; i++) { h += '<span></span>'; }
+  for (var k = 1; k <= n; k++) {
+    var f = ym + '-' + pad(k), st = mapa[f];
+    h += '<button class="dbtn' + (f === fecha ? ' sel' : '') + (st === 'Cerrado' ? ' cerr' : (st ? ' abi' : '')) + (f === hoy ? ' hoy' : '') + '" data-act="pickDay" data-date="' + f + '">' + k + '</button>';
+  }
+  return h + '</div><p class="hint">Verde: día cerrado. Amarillo: guardado pero sin cerrar. Borde dorado: hoy.</p>';
+}
+
+function vistaDia() {
+  var d = S.dia, c = S.cat, cerrado = d.estado === 'Cerrado', dis = cerrado ? ' disabled' : '';
+  var h = '<div class="card">' + calendario(d.fecha) + '</div>';
+  h += '<h2>' + esc(fechaLarga(d.fecha)) + '</h2><div id="estadoDia"></div>';
+  if (d.fuente === 'caja') {
+    h += '<div class="card ' + (d.manual ? 'warn' : 'ok') + '"><b>' + (d.manual ? 'Este día lo editaste a mano' : 'Este día se llenó solo con la caja') + '</b><p class="hint" style="margin:4px 0 ' + (d.manual ? '8' : '0') + 'px">' + (d.manual ? 'Ya no se actualiza solo. Si quieres que vuelva a copiar lo de la caja, usa el botón.' : 'Si lo cambias aquí, deja de actualizarse solo con la caja.') + '</p>' + (d.manual ? '<button class="btn sm" data-act="reimportarDia">Volver a traer este día de la caja</button>' : '') + '</div>';
+  } else if (d.existe && S.sync && S.sync.r && S.sync.r.ok) {
+    h += '<div class="card"><p class="hint" style="margin:0 0 8px">Este día está escrito a mano, así que no se toca solo.</p><button class="btn sm" data-act="reimportarDia">Reemplazarlo con lo que hay en la caja</button></div>';
+  }
+  h += '<div class="card"><h3>Unidades vendidas</h3>';
+  c.productos.filter(function (p) { return p.activo || num(d.u[p.id]) > 0; }).forEach(function (p) {
+    h += '<div class="prod"><div class="nm">' + esc(p.nombre) + '<small>' + fmt(p.precio) + '</small></div><button class="btn step" data-act="menos" data-pid="' + p.id + '"' + dis + '>−</button><input class="qty" type="number" inputmode="numeric" min="0" data-u="' + p.id + '" value="' + (num(d.u[p.id]) || '') + '" placeholder="0"' + dis + '><button class="btn step" data-act="mas" data-pid="' + p.id + '"' + dis + '>+</button></div>';
+  });
+  h += '</div>';
+  h += '<div class="card"><h3>Otras ventas y domicilios</h3><label>Bebidas y otras ventas ($)</label><input id="dExtra" type="number" inputmode="decimal" value="' + (num(d.extra) || '') + '" placeholder="0"' + dis + '>';
+  h += '<label>Domicilios cobrados ($, valor total de los domicilios)</label><input id="dDom" type="number" inputmode="decimal" value="' + (num(d.dom) || '') + '" placeholder="0"' + dis + '>';
+  h += '<label>Cobrado por transferencia o datáfono ($)</label><input id="dDigital" type="number" inputmode="decimal" value="' + (num(d.digital) || '') + '" placeholder="0"' + dis + '></div>';
+  h += '<div class="card"><h3>Pagos a trabajadores del día</h3>';
+  h += '<div class="prod"><div class="nm">Auxiliar de cocina<small>' + fmt(c.params.turnoAux) + ' por turno</small></div><button class="btn step" data-act="turno" data-k="aux" data-d="-1"' + dis + '>−</button><b id="tAux" style="min-width:28px;text-align:center">' + num(d.aux) + '</b><button class="btn step" data-act="turno" data-k="aux" data-d="1"' + dis + '>+</button></div>';
+  h += '<div class="prod"><div class="nm">Domiciliario<small>' + fmt(c.params.turnoDomi) + ' por turno</small></div><button class="btn step" data-act="turno" data-k="domi" data-d="-1"' + dis + '>−</button><b id="tDomi" style="min-width:28px;text-align:center">' + num(d.domi) + '</b><button class="btn step" data-act="turno" data-k="domi" data-d="1"' + dis + '>+</button></div>';
+  h += '<p class="hint" style="margin-bottom:0">Si hubo un trabajador extra en un día de mucho trabajo, suma un turno más. El bono de domicilios (' + c.params.bonoDomiciliosPct + '% de lo cobrado) se calcula solo.</p></div>';
+  h += '<div class="card"><h3>Gastos del día</h3><div id="listaGastos"></div>' + (cerrado ? '' : '<button class="btn block" data-act="addGasto">+ Agregar gasto</button>') + '</div>';
+  h += '<div class="card"><h3>Caja</h3><label>Base de caja al empezar ($)</label><input id="dBase" type="number" inputmode="decimal" value="' + (num(d.base) || '') + '" placeholder="0"' + dis + '><div id="resumenDia"></div></div>';
+  h += '<div class="card"><label>Nota del día (opcional)</label><input id="dNota" type="text" value="' + esc(d.nota) + '" maxlength="300"' + dis + '></div>';
+  h += '<div id="cierreDia"></div>';
+  return h;
+}
+
+function filaGastos() {
+  var d = S.dia, cerrado = d.estado === 'Cerrado', dis = cerrado ? ' disabled' : '';
+  if (!d.gastos.length) { return '<p class="hint">Sin gastos registrados.</p>'; }
+  var cats = S.cat.categoriasGasto;
+  return d.gastos.map(function (g, i) {
+    return '<div style="border-bottom:1px solid var(--line);padding:8px 0"><div class="two"><div><label>Categoría</label><select data-g="' + i + ':categoria"' + dis + '>' + cats.map(function (k) { return '<option' + (k === g.categoria ? ' selected' : '') + '>' + esc(k) + '</option>'; }).join('') + '</select></div><div><label>Valor ($)</label><input type="number" inputmode="decimal" data-g="' + i + ':valor" value="' + (num(g.valor) || '') + '"' + dis + '></div></div><div class="two"><div><label>Concepto</label><input type="text" data-g="' + i + ':concepto" value="' + esc(g.concepto) + '"' + dis + '></div><div><label>Medio</label><select data-g="' + i + ':medio"' + dis + '><option' + (g.medio === 'Efectivo' ? ' selected' : '') + '>Efectivo</option><option' + (g.medio === 'Digital' ? ' selected' : '') + '>Digital</option></select></div></div>' + (cerrado ? '' : '<button class="btn danger sm" data-act="delGasto" data-i="' + i + '" style="margin-top:6px">Quitar</button>') + '</div>';
+  }).join('');
+}
+
+function refrescarDia() {
+  var d = S.dia;
+  if (!d || S.tab !== 'dia') { return; }
+  var c = calcDia(d), p = S.cat.params, cerrado = d.estado === 'Cerrado';
+  var lg = $('#listaGastos'); if (lg && !lg.getAttribute('data-ok')) { lg.innerHTML = filaGastos(); lg.setAttribute('data-ok', '1'); }
+  var ed = $('#estadoDia');
+  if (ed) { ed.innerHTML = cerrado ? '<div class="card ok"><b>Día cerrado.</b> Para cambiarlo, reábrelo con un motivo.</div>' : (S.sucio ? '<div class="card warn"><b>Tienes cambios sin guardar.</b></div>' : ''); }
+  var r = '<table><tbody>';
+  r += '<tr><td>Ventas de productos</td><td>' + fmt(c.vp) + '</td></tr><tr><td>Otras ventas</td><td>' + fmt(c.extra) + '</td></tr><tr><td>Domicilios cobrados</td><td>' + fmt(c.dom) + '</td></tr>';
+  r += '<tr class="tot"><td>Total cobrado</td><td>' + fmt(c.cobrado) + '</td></tr><tr><td>Por transferencia o datáfono</td><td>' + fmt(c.digital) + '</td></tr><tr class="tot"><td>Efectivo de las ventas</td><td>' + fmt(c.efv) + '</td></tr>';
+  r += '<tr><td>(−) Gastos en efectivo</td><td>' + fmt(c.gef) + '</td></tr><tr><td>(−) Auxiliar de cocina</td><td>' + fmt(c.pagoAux) + '</td></tr><tr><td>(−) Domiciliario</td><td>' + fmt(c.pagoDomi) + '</td></tr><tr><td>(−) Bono de domicilios</td><td>' + fmt(c.bono) + '</td></tr><tr><td>(+) Base de caja</td><td>' + fmt(num(d.base)) + '</td></tr>';
+  r += '<tr class="tot"><td>Efectivo esperado en caja</td><td>' + fmt(c.esperado) + '</td></tr></tbody></table>';
+  var dif = c.mo - c.pagoAux;
+  r += '<div class="card ' + (dif >= 0 ? 'ok' : 'warn') + '" style="margin:12px 0 0"><b>Lo que dejó el día</b><p style="margin:4px 0 0">Costo de insumos ' + fmt(c.cv) + ' · margen sobre insumos <b>' + fmt(c.vp + c.extra - c.cv) + '</b>.<br>Deja para gastos fijos: <b>' + fmt(c.vp + c.extra - c.cv - c.mo) + '</b> (un día de gastos fijos cuesta ' + fmt(S.cat.fijosTotal / p.diasOperacion) + ').<br>Mano de obra de las recetas ' + fmt(c.mo) + ' frente a ' + fmt(c.pagoAux) + ' pagados a la auxiliar: ' + (dif >= 0 ? 'cubre y sobran <b>' + fmt(dif) + '</b>.' : 'faltan <b>' + fmt(-dif) + '</b>.') + '</p></div>';
+  var rd = $('#resumenDia'); if (rd) { rd.innerHTML = r; }
+  var ci = $('#cierreDia');
+  if (ci) {
+    var modo = cerrado ? 'c' : 'a';
+    if (ci.getAttribute('data-modo') !== modo) {
+      var h = '';
+      if (cerrado) {
+        h += '<div class="card"><h3>Cierre</h3><p id="infoCierre" style="margin:0"></p><label>Motivo para reabrir</label><input id="dReabrir" type="text"><div style="height:8px"></div><button class="btn block" data-act="reabrir">Reabrir el día</button></div>';
+      } else {
+        var cont0 = d.contado === null || d.contado === undefined || d.contado === '' ? '' : num(d.contado);
+        h += '<div class="card"><h3>Cierre del día</h3><label>Efectivo contado en caja ($)</label><input id="dContado" type="number" inputmode="decimal" value="' + cont0 + '" placeholder="Cuenta el efectivo y escríbelo aquí"><p id="difCierre" style="margin:8px 0 0"></p><div id="motivoBox"></div><div style="height:10px"></div><button class="btn pri block" data-act="guardarDia">Guardar día</button><div style="height:8px"></div><button class="btn block" data-act="cerrarDia">Guardar y cerrar el día</button></div>';
+      }
+      ci.innerHTML = h;
+      ci.setAttribute('data-modo', modo);
+    }
+    if (cerrado) {
+      var ic = $('#infoCierre');
+      if (ic) { ic.innerHTML = 'Efectivo contado: <b>' + fmt(d.contado) + '</b>. Diferencia: <b class="' + (Math.abs(num(d.contado) - c.esperado) < 1 ? 'pos' : 'neg') + '">' + fmt(num(d.contado) - c.esperado) + '</b>.' + (d.motivo ? '<br>Motivo: ' + esc(d.motivo) : ''); }
+    } else {
+      var cont = d.contado === null || d.contado === undefined || d.contado === '' ? null : num(d.contado);
+      var df = cont === null ? null : cont - c.esperado;
+      var dd = $('#difCierre');
+      if (dd) { dd.innerHTML = df === null ? '' : 'Diferencia: <b class="' + (Math.abs(df) < 1 ? 'pos' : 'neg') + '">' + fmt(df) + '</b> ' + (Math.abs(df) < 1 ? '(cuadra)' : (df > 0 ? '(sobra)' : '(falta)')); }
+      var mb = $('#motivoBox'), need = df !== null && Math.abs(df) >= 1;
+      if (mb && mb.getAttribute('data-n') !== (need ? '1' : '0')) {
+        mb.innerHTML = need ? '<label>Motivo de la diferencia</label><input id="dMotivo" type="text" value="' + esc(d.motivo) + '">' : '';
+        mb.setAttribute('data-n', need ? '1' : '0');
+      }
+    }
+  }
+}
+
+function payloadDia() {
+  var d = S.dia;
+  return { u: d.u, extra: num(d.extra), dom: num(d.dom), digital: num(d.digital), aux: num(d.aux), domi: num(d.domi), base: num(d.base), nota: d.nota, contado: d.contado === null || d.contado === '' ? null : num(d.contado), gastos: d.gastos.map(function (g) { return { categoria: g.categoria, concepto: g.concepto, valor: num(g.valor), medio: g.medio }; }) };
+}
+
+function guardarDia(luego) {
+  var d = S.dia;
+  return api('guardarDia', [d.fecha, payloadDia()]).then(function () {
+    d.estado = 'Abierto'; d.existe = true; S.sucio = false; delete S.pend[d.fecha];
+    return cargarMes(d.fecha.slice(0, 7));
+  }).then(function () {
+    toast('Día guardado');
+    if (luego) { return luego(); }
+    $('#vista').innerHTML = vistaDia(); refrescarDia();
+  });
+}
+
+function cerrarDia() {
+  var d = S.dia;
+  if (d.contado === null || d.contado === '' || d.contado === undefined) { toast('Escribe el efectivo contado.'); return; }
+  guardarDia(function () { return api('cerrarDia', [d.fecha, num(d.contado), d.motivo || '']); }).then(function (r) {
+    if (!r) { return; }
+    d.estado = 'Cerrado';
+    return cargarMes(d.fecha.slice(0, 7)).then(function () { toast('Día cerrado'); $('#vista').innerHTML = vistaDia(); refrescarDia(); });
+  }).catch(manejarError);
+}
+
+function unidadMapa() {
+  var m = {};
+  S.cat.insumos.forEach(function (i) { m[i.id] = i.costoUnidad; });
+  S.cat.salsas.forEach(function (s) { m[s.id] = s.costoUnidad; });
+  return m;
+}
+
+function precioAmigable(i) {
+  var u = i.costoUnidad || 0;
+  if (i.unidad === 'g') { return { v: u * 1000, por: 'kilo' }; }
+  if (i.unidad === 'ml') { return { v: u * 1000, por: 'litro' }; }
+  return { v: u, por: i.unidad || 'unidad' };
+}
+
+function insumoRaro(i) {
+  var pa = precioAmigable(i);
+  return (i.unidad === 'g' || i.unidad === 'ml') ? pa.v > 120000 : pa.v > 300000;
+}
+
+function descCompra(i) {
+  var c = i.cantidad;
+  if (i.unidad === 'g' && c >= 1000) { return String(c / 1000).replace('.', ',') + ' kilos'; }
+  if (i.unidad === 'ml' && c >= 1000) { return String(c / 1000).replace('.', ',') + ' litros'; }
+  return String(c).replace('.', ',') + ' ' + (i.unidad === 'unidad' ? (c === 1 ? 'unidad' : 'unidades') : i.unidad);
+}
+
+function usosDeInsumo(id) {
+  var o = [];
+  S.cat.productos.forEach(function (p) { if ((S.cat.recetas[p.id] || []).some(function (l) { return l.ref === id; })) { o.push(p.nombre); } });
+  S.cat.salsas.forEach(function (sv) { if ((S.cat.recetas[sv.id] || []).some(function (l) { return l.ref === id; })) { o.push(sv.nombre + ' (salsa)'); } });
+  return o;
+}
+
+function alertasDatos() {
+  var L = [];
+  S.cat.insumos.filter(function (i) { return i.activo && insumoRaro(i); }).forEach(function (i) { var pa = precioAmigable(i); L.push({ tipo: 'insumo', id: i.id, txt: i.nombre + ' figura a ' + fmt(pa.v) + ' por ' + pa.por + ' (' + fmt(i.costoUnidad) + ' por ' + i.unidad + ')' }); });
+  if (L.length) { return L; }
+  S.cat.productos.filter(function (p) { return p.activo && p.precio > 0 && p.mp > p.precio * 2; }).forEach(function (p) { L.push({ tipo: 'producto', id: p.id, txt: p.nombre + ': los materiales cuestan ' + fmt(p.mp) + ' y se vende en ' + fmt(p.precio) }); });
+  return L;
+}
+
+function htmlAlertasDatos() {
+  var L = alertasDatos();
+  if (!L.length) { return ''; }
+  var h = '<div class="card red"><b>Revisa estos datos: parecen un error</b><p class="muted" style="margin:4px 0 8px">Los costos salen de los precios de los insumos. Si un insumo figura carísimo, casi siempre es que se escribió el precio de un kilo (o de una unidad) con la cantidad en 1 gramo. Al corregirlo se arreglan todos los productos que lo usan.</p>';
+  L.forEach(function (a) { h += '<div class="item" style="padding:6px 0"><div class="grow">' + esc(a.txt) + '</div><button class="btn sm" data-act="' + (a.tipo === 'insumo' ? 'editInsumo' : 'detalle') + '" data-id="' + a.id + '">' + (a.tipo === 'insumo' ? 'Corregir' : 'Ver por qué') + '</button></div>'; });
+  return h + '</div>';
+}
+
+function nombreMesCorto(ym) { var p = ym.split('-'); return ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][+p[1] - 1] + ' ' + p[0]; }
+
+function cargarEstadoHist() {
+  S.histCargando = true;
+  api('estadoHistorico', []).then(function (e) { S.hist = e; S.histCargando = false; var el = $('#histBox'); if (el) { el.innerHTML = htmlHistorico(); } }).catch(function (e) { S.histCargando = false; var el = $('#histBox'); if (el) { el.innerHTML = '<p class="neg">' + esc(e.message) + '</p>'; } });
+}
+
+function ymHist() { return S.hTipo === 'fecha' ? '' : (S.hAnio + '-' + (S.hMes || '03')); }
+
+function totalPesosCols() {
+  var t = 0;
+  (S.hCols || []).forEach(function (c) { t += (+c.unidades || 0) * (+c.precio || 0); });
+  return Math.round(t);
+}
+
+function htmlHistorico() {
+  var P = S.histPrev, Q = S.hPrevProd, H = S.hist, h = '';
+  var anioHoy = +((S.fecha || ymd(new Date())).slice(0, 4)); if (!S.hAnio) { S.hAnio = String(anioHoy); }
+  if (!S.hMes) { S.hMes = '03'; }
+  var NM = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  h += '<label>¿Cómo viene tu Excel?</label><select id="hTipo"><option value="prod"' + (S.hTipo === 'prod' ? ' selected' : '') + '>Una hoja por mes, con una columna por producto y las cantidades vendidas (como la mía)</option><option value="dia"' + (S.hTipo === 'dia' ? ' selected' : '') + '>Una hoja por mes, con solo el día y el total en pesos</option><option value="fecha"' + (S.hTipo === 'fecha' ? ' selected' : '') + '>Filas con la fecha completa y el total en pesos</option></select>';
+  if (S.hTipo !== 'fecha') {
+    h += '<div class="two"><div><label>Mes de esa hoja</label><select id="hMes">' + NM.map(function (n, k) { var v = ('0' + (k + 1)).slice(-2); return '<option value="' + v + '"' + (S.hMes === v ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select></div><div><label>Año</label><select id="hAnio">' + [anioHoy - 3, anioHoy - 2, anioHoy - 1, anioHoy].map(function (a) { return '<option value="' + a + '"' + (S.hAnio === String(a) ? ' selected' : '') + '>' + a + '</option>'; }).join('') + '</select></div></div>';
+  }
+  if (S.hTipo === 'prod') {
+    h += '<p class="hint" style="margin:8px 0">Abre la hoja de ese mes en Excel y copia <b>toda la tabla</b>: desde la fila de títulos (DIA, SALCHIPAPA S, SALCHIPAPA M…) hasta el último día. Copia con Ctrl + C y pega aquí con Ctrl + V. La columna TOTAL VENTA y la fila de totales no estorban: las uso para comprobar que todo cuadra. La plata de cada día se calcula con el precio de cada producto, que confirmas abajo <b>una sola vez</b>.</p>';
+  } else if (S.hTipo === 'dia') {
+    h += '<p class="hint" style="margin:8px 0">Copia solo dos columnas: el número del día y el total de ese día. Las filas de «Total» y los días vacíos los ignoro. Cuando guardes un mes, pasa solo al siguiente.</p>';
+  } else {
+    h += '<p class="hint" style="margin:8px 0">Pega dos columnas: la fecha y el total vendido ese día (una fila por día).</p>';
+  }
+  h += '<p class="hint" style="margin:8px 0"><b>Esto solo guarda cuánto se vendió cada día.</b> No crea compras, no mueve el inventario ni cambia los precios de los insumos. Se ve en la página de análisis.</p>';
+  var ph = S.hTipo === 'prod' ? 'DIA    SALCHIPAPA S    SALCHIPAPA M    ...&#10;1    3    2    ...&#10;2    1    4    ...' : (S.hTipo === 'dia' ? '1    850.000&#10;2    920.500&#10;3    1.050.000&#10;...' : '2026-01-02    850.000&#10;2026-01-03    920.500&#10;...');
+  h += '<textarea id="hText" rows="7" style="width:100%;font-family:monospace;white-space:pre" placeholder="' + ph + '">' + esc(S.histTexto) + '</textarea>';
+  h += '<label>Nota (opcional)</label><input id="hNota" type="text" maxlength="120" value="' + esc(S.histNota) + '" placeholder="Ej: ventas de marzo">';
+  h += '<div class="row" style="margin-top:8px;gap:8px"><button class="btn" data-act="hRevisar">Revisar lo que pegué</button>' + (S.histTexto ? '<button class="btn" data-act="hLimpiar">Limpiar</button>' : '') + '</div>';
+  if (S.hTipo === 'prod' && Q) {
+    h += '<div class="card" style="margin-top:10px"><b>Entendí ' + Q.dias + ' días de ' + esc(nombreMesCorto(Q.ym)) + '</b> · ' + (Math.round(Q.totalUnidades * 10) / 10) + ' productos vendidos<div class="hint" style="margin:4px 0">Con los precios de abajo, el mes suma <b id="hTotalPesos">' + fmt(totalPesosCols()) + '</b>.</div>';
+    h += '<h3 style="margin-top:8px">Precio de cada producto</h3><p class="hint" style="margin:0 0 6px">Escoge a qué producto del costeo corresponde (si existe) y confirma el precio con el que se vendió. Se guarda para los demás meses.</p>';
+    (S.hCols || []).forEach(function (c) {
+      h += '<div style="margin:8px 0;padding-bottom:8px;border-bottom:1px solid var(--line)"><div class="row sp"><b>' + esc(c.encabezado) + '</b><span class="hint">' + (Math.round(c.unidades * 10) / 10) + ' vendidos</span></div><div class="two"><div><select data-hprod="' + esc(c.clave) + '"><option value="">No está en el costeo</option>' + Q.productos.map(function (pr) { return '<option value="' + esc(pr.id) + '"' + (c.productoId === pr.id ? ' selected' : '') + '>' + esc(pr.nombre) + '</option>'; }).join('') + '</select></div><div><input type="text" inputmode="numeric" data-hprecio="' + esc(c.clave) + '" value="' + (c.precio ? c.precio : '') + '" placeholder="Precio $"></div></div>' + '<div class="neg" id="falta_' + esc(c.clave) + '" style="font-size:12px;' + (c.precio ? 'display:none' : '') + '">Falta el precio</div></div>';
+    });
+    if (Q.nDiferencias) { h += '<div class="card warn" style="margin-top:8px"><b>En ' + Q.nDiferencias + ' días la suma de los productos no coincide con TOTAL VENTA</b>' + Q.diferencias.map(function (x) { return '<div class="s">· día ' + x.dia + ': productos ' + x.suma + ', TOTAL VENTA ' + x.total + '</div>'; }).join('') + '<div class="hint">Puede ser un error de digitación en la hoja o una columna que no copiaste. Si sigues, se guardan las cantidades por producto.</div></div>'; }
+    if (Q.nDescartadas) { h += '<div class="card warn" style="margin-top:8px"><b>No usé ' + Q.nDescartadas + ' datos</b>' + Q.descartadas.map(function (x) { return '<div class="s">· fila ' + x.linea + ' («' + esc(x.texto) + '»): ' + esc(x.motivo) + '</div>'; }).join('') + '</div>'; }
+    if (Q.yaHabia) { h += '<p class="hint">' + Q.yaHabia + ' de esos días ya estaban en el histórico: se reemplazarán.</p>'; }
+    h += '<button class="btn pri block" data-act="hGuardar" style="margin-top:8px">Guardar ' + Q.dias + ' días de ' + esc(nombreMesCorto(Q.ym)) + '</button></div>';
+  } else if (S.hTipo !== 'prod' && P) {
+    var R = P.resumen;
+    h += '<div class="card" style="margin-top:10px"><b>Entendí ' + R.dias + ' días' + (S.histPrevYm ? ' de ' + esc(nombreMesCorto(S.histPrevYm)) : '') + '</b> · del ' + esc(R.desde) + ' al ' + esc(R.hasta) + ' · total ' + fmt(R.total);
+    h += '<div class="hint" style="margin:4px 0">' + (S.histPrevYm ? 'Tomé el número de cada fila como el día de ' + esc(nombreMesCorto(S.histPrevYm)) + '. Revisa que estas filas estén bien interpretadas:' : 'Leí las fechas como día/mes/año. Revisa que estas filas estén bien interpretadas:') + '</div>' + P.muestra.map(function (x) { return '<div class="s">· ' + esc(x.fecha) + ' → ' + fmt(x.total) + '</div>'; }).join('');
+    h += '<div class="tw" style="margin-top:8px"><table><thead><tr><th>Mes</th><th>Días</th><th>Vendido</th></tr></thead><tbody>' + R.meses.map(function (m) { return '<tr><td>' + esc(nombreMesCorto(m.ym)) + '</td><td>' + m.dias + '</td><td>' + fmt(m.total) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    if (P.nDescartadas) { h += '<div class="card warn" style="margin-top:8px"><b>No usé ' + P.nDescartadas + ' filas</b>' + P.descartadas.map(function (x) { return '<div class="s">· fila ' + x.linea + ' («' + esc(x.texto) + '»): ' + esc(x.motivo) + '</div>'; }).join('') + (P.nDescartadas > P.descartadas.length ? '<div class="s">y otras más.</div>' : '') + '</div>'; }
+    if (P.repetidas) { h += '<p class="hint">Había ' + P.repetidas + ' fechas repetidas: me quedé con la última fila de cada una.</p>'; }
+    if (P.ceros) { h += '<p class="hint">' + P.ceros + ' días con valor 0 o vacío no se guardan.</p>'; }
+    if (P.yaHabia) { h += '<p class="hint">' + P.yaHabia + ' de esos días ya estaban en el histórico: se reemplazarán con estos valores.</p>'; }
+    if (P.enDias) { h += '<p class="hint">' + P.enDias + ' de esos días ya tienen datos en el costeo (de la caja). En el análisis se usarán los de la caja y no se sumará el histórico, para no contar dos veces.</p>'; }
+    h += '<button class="btn pri block" data-act="hGuardar" style="margin-top:8px">Guardar ' + R.dias + ' días en el histórico</button></div>';
+  }
+  h += '<h3 style="margin-top:14px">Lo que ya está guardado</h3>';
+  if (!H) { h += '<p class="hint">Revisando...</p>'; }
+  else if (!H.dias) { h += '<p class="hint">Todavía no has cargado ventas históricas.</p>'; }
+  else {
+    h += '<p style="margin:0 0 6px"><b>' + H.dias + ' días</b> · ' + fmt(H.total) + '</p><div class="tw"><table><thead><tr><th>Mes</th><th>Días</th><th>Vendido</th></tr></thead><tbody>' + H.meses.map(function (m) { return '<tr><td>' + esc(nombreMesCorto(m.ym)) + '</td><td>' + m.dias + '</td><td>' + fmt(m.total) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    h += '<h3 style="margin-top:12px">Cargas hechas</h3>' + H.lotes.map(function (l) { return '<div class="item" style="align-items:flex-start"><div class="grow"><div class="t">' + esc(l.desde) + ' al ' + esc(l.hasta) + '</div><div class="s">' + l.dias + ' días · ' + fmt(l.total) + (l.nota ? ' · ' + esc(l.nota) : '') + '</div></div><button class="btn sm" data-act="hBorrar" data-id="' + esc(l.lote) + '">Borrar esta carga</button></div>'; }).join('');
+  }
+  return h;
+}
+
+function haceCuanto(ts) {
+  var s = Math.max(0, Math.round((Date.now() - ts) / 1000));
+  if (s < 60) { return 'hace unos segundos'; }
+  if (s < 3600) { return 'hace ' + Math.round(s / 60) + ' min'; }
+  return 'hace ' + Math.round(s / 3600) + ' h';
+}
+
+function textoSync(r) {
+  if (!r) { return ''; }
+  var t = [];
+  if (r.dias && (r.dias.nuevos || r.dias.actualizados)) { t.push((r.dias.nuevos ? r.dias.nuevos + ' días nuevos' : '') + (r.dias.nuevos && r.dias.actualizados ? ' y ' : '') + (r.dias.actualizados ? r.dias.actualizados + ' actualizados' : '')); }
+  if (r.precios && r.precios.actualizados.length) { t.push(r.precios.actualizados.length + ' precios de insumos'); }
+  if (r.esperadas && r.esperadas.actualizadas) { t.push(r.esperadas.actualizadas + ' unidades esperadas'); }
+  if (r.pagosFijos && (r.pagosFijos.nuevos || r.pagosFijos.quitados)) { t.push((r.pagosFijos.nuevos + r.pagosFijos.quitados) + ' pagos de gastos fijos'); }
+  return t.join(', ');
+}
+
+function htmlEstadoCaja() {
+  var Y = S.sync;
+  if (!Y || Y.cargando) { return '<div class="card"><p class="hint" style="margin:0">Trayendo los datos de la caja...</p></div>'; }
+  if (Y.error) { return '<div class="card" style="border-color:var(--bad)"><b>No pude traer los datos de la caja</b><p class="hint" style="margin:4px 0 8px">' + esc(Y.error) + '</p><button class="btn sm" data-act="traerCaja">Reintentar</button></div>'; }
+  var r = Y.r || {};
+  if (r.sinId) { return '<div class="card warn"><b>La caja todavía no está conectada</b><p class="hint" style="margin:4px 0 0">Para que el costeo se llene solo, pega el ID de la caja en Código.gs (la línea CAJA_ID), ejecuta guardarCajaId y vuelve a abrir esta página.</p></div>'; }
+  if (r.ok === false) { return '<div class="card" style="border-color:var(--bad)"><b>No pude traer los datos de la caja</b><p class="hint" style="margin:4px 0 8px">' + esc(r.error || '') + '</p><button class="btn sm" data-act="traerCaja">Reintentar</button></div>'; }
+  var res = r.resumen || {}, t = textoSync(res);
+  return '<div class="card ok"><div class="row sp"><div><b>Caja conectada</b><div class="hint" style="margin:2px 0 0">Actualizado ' + esc(haceCuanto(Y.ts)) + (t ? ' · ' + esc(t) : ' · sin cambios') + '</div></div><button class="btn sm" data-act="traerCaja">Traer ahora</button></div></div>';
+}
+
+function repintarEstadoSync() {
+  var el = $('#estadoCajaBox'); if (el) { el.innerHTML = htmlEstadoCaja(); }
+  var el2 = $('#cajaBox'); if (el2) { el2.innerHTML = htmlCajaAjustes(); }
+}
+
+function sincronizarAlAbrir(forzar) {
+  if (S.sync && S.sync.cargando) { return Promise.resolve(); }
+  S.sync = { cargando: true };
+  repintarEstadoSync();
+  return api('sincronizarCaja', [!!forzar]).then(function (r) {
+    S.sync = { cargando: false, r: r, ts: Date.now() };
+    var cambios = r && r.ok && !r.omitido && r.cambios > 0;
+    if (!cambios) { repintarEstadoSync(); if (forzar && r && r.ok) { toast('La caja ya estaba al día'); } return null; }
+    return recargarCat().then(function () { return cargarMes(S.ym); }).then(function () {
+      if (S.tab === 'dia' && S.dia && !S.sucio) { var f = S.dia.fecha; return api('dia', [f]).then(function (d) { S.dia = borradorDe(d, f); }); }
+      return null;
+    }).then(function () { S.cajaEst = null; repintar(); toast('Traje de la caja: ' + textoSync(r.resumen)); });
+  }).catch(function (e) { S.sync = { cargando: false, error: e.message }; repintarEstadoSync(); });
+}
+
+function cargarEstadoCaja() {
+  S.cajaCargando = true;
+  api('estadoCaja', []).then(function (e) { S.cajaEst = e; S.cajaCargando = false; var el = $('#cajaBox'); if (el) { el.innerHTML = htmlCajaAjustes(); } }).catch(function (e) { S.cajaCargando = false; S.cajaEst = { error: e.message }; var el = $('#cajaBox'); if (el) { el.innerHTML = htmlCajaAjustes(); } });
+}
+
+function selectEq(tipo, x, cajaLista) {
+  var h = '<select data-eq="' + tipo + '" data-id="' + esc(x.id) + '"><option value=""' + (!x.cajaId && !x.ignorado ? ' selected' : '') + '>Sin pareja todavía</option><option value="-"' + (x.ignorado ? ' selected' : '') + '>No existe en la caja</option>';
+  cajaLista.slice().sort(function (a, b) { return a.nombre < b.nombre ? -1 : 1; }).forEach(function (c) { h += '<option value="' + esc(c.id) + '"' + (x.cajaId === c.id ? ' selected' : '') + '>' + esc(c.nombre) + (c.unidad ? ' (' + esc(c.unidad) + ')' : '') + '</option>'; });
+  return h + '</select>';
+}
+
+function htmlCajaAjustes() {
+  var E = S.cajaEst, h = '';
+  if (!E) { return '<p class="hint">Revisando la conexión con la caja...</p>'; }
+  if (E.error && !E.productos) { return '<p class="neg">' + esc(E.error) + '</p>'; }
+  if (!E.configurado) { return '<p class="hint">Aún no está conectada. Pega el ID de la hoja de la caja en la línea CAJA_ID de Código.gs, ejecuta la función guardarCajaId y abre de nuevo esta página.</p>'; }
+  h += '<p style="margin:0 0 6px">Archivo de la caja: <b>' + esc(E.archivo || '') + '</b>. El costeo solo lee la caja; nunca escribe en ella.</p>';
+  var u = E.ultima || {};
+  if (u.error) { h += '<p class="neg">La última sincronización falló: ' + esc(u.error) + '</p>'; }
+  else if (u.ts) {
+    h += '<p class="hint" style="margin:0 0 6px">Última sincronización: ' + esc(u.ts) + (textoSync(u) ? ' · ' + esc(textoSync(u)) : ' · sin cambios') + '.</p>';
+    if (u.precios && u.precios.actualizados.length) { h += '<details><summary>Precios de insumos que cambié (' + u.precios.actualizados.length + ')</summary>' + u.precios.actualizados.map(function (x) { return '<div class="s">· ' + esc(x.nombre) + ': ' + fmt(x.de) + ' → ' + fmt(x.a) + '</div>'; }).join('') + '</details>'; }
+    if (u.precios && u.precios.revisar.length) { h += '<div class="card warn"><b>Revisa estos insumos</b>' + u.precios.revisar.map(function (x) { return '<div class="s">· <b>' + esc(x.nombre) + ':</b> ' + esc(x.motivo) + '</div>'; }).join('') + '</div>'; }
+    if (u.esperadas && u.esperadas.motivo) { h += '<p class="hint">Unidades esperadas: ' + esc(u.esperadas.motivo) + '.</p>'; }
+    if (u.pagosFijos && u.pagosFijos.sinEmparejar.length) { h += '<p class="hint">Gastos de la caja que parecen fijos pero no encontré en tu lista de gastos fijos: ' + esc(u.pagosFijos.sinEmparejar.join(', ')) + '.</p>'; }
+  }
+  var opts = [['ventas', 'Ventas del día, turnos y gastos en la pantalla Día'], ['precios', 'Precios de los insumos, tomados de las compras'], ['pagosFijos', 'Pagos de gastos fijos, tomados de los gastos de la caja'], ['turnos', 'Contar los turnos de los trabajadores'], ['esperadas', 'Unidades esperadas al mes, con las ventas reales']];
+  h += '<h3 style="margin-top:12px">Qué se trae solo</h3>' + opts.map(function (o) { return '<label style="display:flex;gap:8px;align-items:center;margin:6px 0"><input type="checkbox" data-sync="' + o[0] + '" style="width:auto;min-height:0"' + (E.auto[o[0]] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('');
+  h += '<div style="height:8px"></div><button class="btn block" data-act="traerCaja">Traer de la caja ahora</button>';
+  function bloque(titulo, tipo, lista, cajaLista) {
+    var sin = lista.filter(function (x) { return !x.cajaId && !x.ignorado; }), con = lista.filter(function (x) { return x.cajaId || x.ignorado; });
+    var b = '<h3 style="margin-top:14px">' + titulo + '</h3>';
+    if (!sin.length) { b += '<p class="pos" style="margin:0">Todos tienen pareja.</p>'; }
+    else {
+      b += '<p class="hint" style="margin:0 0 6px">Estos no se llaman igual en la caja. Escoge a cuál corresponde cada uno (o marca que no existe) y el costeo los empareja.</p>';
+      sin.forEach(function (x) { b += '<div style="margin:6px 0"><div class="s"><b>' + esc(x.nombre) + '</b></div>' + selectEq(tipo, x, cajaLista) + '</div>'; });
+    }
+    if (con.length) { b += '<details style="margin-top:8px"><summary>Ya emparejados (' + con.length + ')</summary>' + con.map(function (x) { return '<div style="margin:6px 0"><div class="s">' + esc(x.nombre) + (x.origen === 'manual' ? ' <span class="pill">a mano</span>' : '') + '</div>' + selectEq(tipo, x, cajaLista) + '</div>'; }).join('') + '</details>'; }
+    return b;
+  }
+  h += bloque('Productos del costeo y de la caja', 'Producto', E.productos, E.cajaProductos);
+  h += bloque('Insumos del costeo y de la caja', 'Insumo', E.insumos, E.cajaInsumos);
+  return h;
+}
+
+function pesos(v) {
+  var t = String(v === null || v === undefined ? '' : v).trim().replace(/\s|\$/g, '');
+  if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(t)) { t = t.replace(/\./g, '').replace(',', '.'); } else { t = t.replace(',', '.'); }
+  var n = Number(t);
+  return isFinite(n) ? n : 0;
+}
+
+function pfMes() {
+  if (!S.pfYm) { S.pfYm = (S.fecha || ymd(new Date())).slice(0, 7); }
+  return S.pfYm;
+}
+
+function cargarPagosFijos() {
+  var ym = pfMes();
+  S.pfCargando = true;
+  api('pagosFijos', [ym]).then(function (v) {
+    S.pfCargando = false; S.pf = v;
+    var el = $('#pfBox'); if (el) { el.innerHTML = htmlPagosFijos(); }
+  }).catch(function (e) {
+    S.pfCargando = false;
+    var el = $('#pfBox'); if (el) { el.innerHTML = '<div class="card bad"><p style="margin:0">' + esc(e.message) + '</p></div>'; }
+  });
+}
+
+function htmlPagosFijos() {
+  var ym = pfMes(), P = (S.pf && S.pf.ym === ym) ? S.pf : null;
+  var h = '<div class="card"><div class="row sp"><button class="btn sm" data-act="pfprev">◀</button><div style="font:700 18px Georgia,serif">' + esc(tituloMes(ym)) + '</div><button class="btn sm" data-act="pfnext">▶</button></div>';
+  if (!P) { return h + '<p class="hint" style="margin:8px 0 0">Cargando los pagos...</p></div>'; }
+  var T = P.totales, f = T.due > 0 ? T.pagado / T.due : 0;
+  h += '<div class="grid g3" style="margin-top:10px"><div class="kpi"><div class="l">Gastos fijos del mes</div><div class="v">' + fmt(T.due) + '</div></div><div class="kpi"><div class="l">Ya pagado</div><div class="v pos">' + fmt(T.pagado) + '</div></div><div class="kpi"><div class="l">Pendiente</div><div class="v ' + (T.pendiente > 0 ? 'neg' : 'pos') + '">' + (T.pendiente > 0 ? fmt(T.pendiente) : 'Todo pago') + '</div></div></div>';
+  h += '<div class="bar"><i class="' + (T.pendiente <= 0 ? 'ok' : '') + '" style="width:' + Math.min(100, f * 100).toFixed(0) + '%"></i></div>';
+  P.items.forEach(function (x) {
+    var cls = x.estado === 'Pagado' ? 'ok' : (x.estado === 'Parcial' ? 'warn' : 'bad');
+    h += '<div class="item" style="align-items:flex-start;flex-wrap:wrap"><div class="grow" style="min-width:170px"><div class="t">' + esc(x.nombre) + ' <span class="pill ' + cls + '">' + esc(x.estado) + '</span></div><div class="s">Debes ' + fmt(x.due) + ' · pagado ' + fmt(x.pagado) + (x.pendiente > 0 ? ' · <b class="neg">faltan ' + fmt(x.pendiente) + '</b>' : '') + (x.exceso > 0 ? ' · de más ' + fmt(x.exceso) : '') + '</div>';
+    x.pagos.forEach(function (g) { h += '<div class="s">· ' + esc(g.fecha) + ' · ' + fmt(g.valor) + (g.nota ? ' · ' + esc(g.nota) : '') + ' <a href="#" data-act="borrarPagoFijo" data-id="' + esc(g.id) + '" style="color:var(--bad)">borrar</a></div>'; });
+    h += '</div><div class="r" style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="btn sm pri" data-act="pagarFijo" data-id="' + esc(x.id) + '">Registrar pago</button>' + (x.pendiente > 0 ? '<button class="btn sm" data-act="pagoTodoFijo" data-id="' + esc(x.id) + '">Pagó todo</button>' : '') + '</div></div>';
+  });
+  return h + '<p class="hint" style="margin:8px 0 0">Marca aquí lo que ya pagaste de cada gasto fijo del mes. Puedes pagar por partes (por ejemplo, el administrador cada sábado). Esto no cambia el cálculo de los costos.</p></div>';
+}
+
+function modalPagoFijo(id) {
+  var P = S.pf, x = null;
+  (P ? P.items : []).forEach(function (i) { if (i.id === id) { x = i; } });
+  if (!x) { return; }
+  S.edit = { tipo: 'pagoFijo', id: id };
+  abrirModal('<h2>Registrar pago</h2><p style="margin:0 0 8px"><b>' + esc(x.nombre) + '</b> · ' + esc(tituloMes(P.ym)) + '<br><span class="hint">Debes ' + fmt(x.due) + ' · ya pagado ' + fmt(x.pagado) + (x.pendiente > 0 ? ' · faltan ' + fmt(x.pendiente) : '') + '</span></p><label>¿Cuánto pagaste? ($)</label><input id="pfValor" type="text" inputmode="numeric" value="' + (x.pendiente > 0 ? x.pendiente : '') + '"><div class="two"><div><label>Fecha del pago</label><input id="pfFecha" type="date" value="' + esc(S.fecha || ymd(new Date())) + '"></div><div><label>Nota (opcional)</label><input id="pfNota" type="text" maxlength="120" placeholder="Ej: abono"></div></div><div style="height:12px"></div><button class="btn pri block" data-act="guardarPagoFijo">Guardar pago</button><div style="height:8px"></div><button class="btn block" data-act="cerrarModal">Cancelar</button>');
+}
+
+function vistaCatalogo() {
+  var h = '<h2>Catálogo</h2><div class="tabsub">' + [['insumos', 'Insumos'], ['salsas', 'Salsas'], ['productos', 'Productos'], ['fijos', 'Gastos fijos']].map(function (t) { return '<button class="btn" data-act="sub" data-v="' + t[0] + '" aria-pressed="' + (S.sub === t[0]) + '">' + t[1] + '</button>'; }).join('') + '</div>';
+  var c = S.cat;
+  if (S.sub === 'insumos') {
+    h += htmlAlertasDatos();
+    h += '<button class="btn pri block" data-act="nuevoInsumo" style="margin-bottom:12px">+ Nuevo insumo</button>';
+    ['Insumo', 'Desechable'].forEach(function (tipo) {
+      var lista = c.insumos.filter(function (i) { return i.tipo === tipo; });
+      h += '<div class="card"><h3>' + (tipo === 'Insumo' ? 'Materia prima' : 'Desechables') + '</h3>';
+      if (!lista.length) { h += '<p class="hint">Sin elementos.</p>'; }
+      lista.forEach(function (i) {
+        var ch = i.costoAnterior > 0 ? i.costoTotal / i.costoAnterior - 1 : null, pa = precioAmigable(i);
+        h += '<div class="item' + (i.activo ? '' : '" style="opacity:.5') + '"><div class="grow" data-act="editInsumo" data-id="' + i.id + '" style="cursor:pointer"><div class="t">' + esc(i.nombre) + (i.activo ? '' : ' (archivado)') + (insumoRaro(i) ? ' <span class="pill bad">¿error?</span>' : '') + '</div><div class="s">Compras ' + descCompra(i) + ' por ' + fmt(i.costoTotal) + ' · <b>' + fmt(pa.v) + ' por ' + esc(pa.por) + '</b>' + (ch !== null && Math.abs(ch) > 0.0005 ? ' · <span class="' + (ch > 0 ? 'neg' : 'pos') + '">' + (ch > 0 ? '▲ ' : '▼ ') + pct(Math.abs(ch)) + ' (antes ' + fmt(i.costoAnterior) + ')</span>' : '') + '</div></div><input type="number" inputmode="decimal" style="width:104px;text-align:right" data-pm="' + i.id + '" value="' + i.costoTotal + '"></div>';
+      });
+      h += '</div>';
+    });
+    h += '<p class="hint">Cambia el valor de la derecha cuando cambie lo que pagas por la presentación: todos los costos se recalculan. Toca el nombre para editar.</p>';
+  } else if (S.sub === 'salsas') {
+    h += '<button class="btn pri block" data-act="nuevaSalsa" style="margin-bottom:12px">+ Nueva salsa o preparación</button><div class="card">';
+    if (!c.salsas.length) { h += '<p class="hint">Sin salsas.</p>'; }
+    c.salsas.forEach(function (s) { h += '<div class="item" data-act="editSalsa" data-id="' + s.id + '" style="cursor:pointer' + (s.activo ? '' : ';opacity:.5') + '"><div class="grow"><div class="t">' + esc(s.nombre) + '</div><div class="s">Rinde ' + s.rinde + ' ' + esc(s.unidad) + ' · cuesta ' + fmt(s.costoTotal) + '</div></div><div class="r"><b>' + fmt2(s.costoUnidad) + '</b><div class="s">por ' + esc(s.unidad) + '</div></div></div>'; });
+    h += '</div>';
+  } else if (S.sub === 'fijos') {
+    h += '<h3 style="margin:0 0 8px">Pagos del mes</h3><div id="pfBox">' + htmlPagosFijos() + '</div>';
+    if ((!S.pf || S.pf.ym !== pfMes()) && !S.pfCargando) { setTimeout(cargarPagosFijos, 0); }
+    h += '<h3 style="margin:16px 0 8px">Lista de gastos fijos</h3>';
+    h += '<button class="btn pri block" data-act="nuevoFijo" style="margin-bottom:12px">+ Nuevo gasto fijo</button><div class="card">';
+    if (!c.fijos.length) { h += '<p class="hint">Sin gastos fijos.</p>'; }
+    c.fijos.forEach(function (x) {
+      var sem = x.frecuencia === 'Semanal';
+      h += '<div class="item" data-act="editFijo" data-id="' + x.id + '" style="cursor:pointer' + (x.activo ? '' : ';opacity:.5') + '"><div class="grow"><div class="t">' + esc(x.nombre) + (x.activo ? '' : ' (archivado)') + '</div><div class="s">' + (sem ? 'Cada ' + DIAS_L[x.dia] + ' · equivale a ' + fmt(x.mensual) + ' al mes' : 'Se paga el día ' + x.dia) + '</div></div><div class="r"><b>' + fmt(x.valor) + '</b><div class="s">' + (sem ? 'por semana' : 'al mes') + '</div></div></div>';
+    });
+    h += '<div class="row sp" style="margin-top:8px"><b>Total al mes</b><b>' + fmt(c.fijosTotal) + '</b></div></div><p class="hint">Todos estos gastos entran al CIF: se reparten entre los productos según lo que vende cada uno. Si pagas algo cada semana, escríbelo como semanal y el sistema lo convierte a mes.</p>';
+  } else {
+    h += '<button class="btn pri block" data-act="nuevoProducto" style="margin-bottom:12px">+ Nuevo producto</button><div class="card">';
+    c.productos.forEach(function (p) { h += '<div class="item" data-act="editProducto" data-id="' + p.id + '" style="cursor:pointer' + (p.activo ? '' : ';opacity:.5') + '"><div class="grow"><div class="t">' + esc(p.nombre) + '</div><div class="s">Precio ' + fmt(p.precio) + ' · materia prima ' + fmt(p.mp) + ' · mano de obra ' + fmt(p.mo) + '</div></div><div class="r"><b class="' + (p.precio - p.mp - p.mo >= 0 ? 'pos' : 'neg') + '">' + fmt(p.precio - p.mp - p.mo) + '</b><div class="s">queda</div></div></div>'; });
+    h += '</div>';
+  }
+  return h;
+}
+
+function fmt2(n) { return '$' + (Number(n) || 0).toFixed(2).replace('.', ','); }
+
+function abrirModal(html) { $('#modal').innerHTML = '<div class="modalbg"><div class="modal">' + html + '</div></div>'; }
+function cerrarModal() { $('#modal').innerHTML = ''; S.edit = null; }
+
+var COMPRA_OPC = {
+  peso: [['g', 'gramos', 1], ['kg', 'kilos', 1000]],
+  volumen: [['ml', 'mililitros', 1], ['l', 'litros', 1000]],
+  unidad: [['und', 'unidades', 1]]
+};
+
+function opcionesCompra(mide, sel) {
+  return COMPRA_OPC[mide].map(function (o) { return '<option value="' + o[0] + '" data-f="' + o[2] + '"' + (o[0] === sel ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('');
+}
+
+function modalInsumo(id) {
+  var i = null;
+  S.cat.insumos.forEach(function (x) { if (x.id === id) { i = x; } });
+  i = i || { id: '', nombre: '', tipo: 'Insumo', unidad: 'g', cantidad: 1000, costoTotal: 0, stockMin: 0, activo: true };
+  var mide = i.unidad === 'g' ? 'peso' : (i.unidad === 'ml' ? 'volumen' : 'unidad'), compraU = mide === 'peso' ? 'g' : (mide === 'volumen' ? 'ml' : 'und'), cant = i.cantidad;
+  if (mide === 'peso' && cant >= 1000) { compraU = 'kg'; cant = +(cant / 1000).toFixed(3); }
+  if (mide === 'volumen' && cant >= 1000) { compraU = 'l'; cant = +(cant / 1000).toFixed(3); }
+  S.edit = { tipo: 'insumo', id: i.id, miUnidad: i.unidad, antes: i.id ? precioAmigable(i) : null };
+  var usos = i.id ? usosDeInsumo(i.id) : [];
+  abrirModal('<h2>' + (i.id ? 'Editar insumo' : 'Nuevo insumo') + '</h2><label>Nombre</label><input id="mNombre" type="text" value="' + esc(i.nombre) + '"><div class="two"><div><label>Tipo</label><select id="mTipo"><option' + (i.tipo === 'Insumo' ? ' selected' : '') + '>Insumo</option><option' + (i.tipo === 'Desechable' ? ' selected' : '') + '>Desechable</option></select></div><div><label>¿Cómo se mide?</label><select id="mMide"><option value="peso"' + (mide === 'peso' ? ' selected' : '') + '>Por peso (gramos, kilos)</option><option value="volumen"' + (mide === 'volumen' ? ' selected' : '') + '>Por volumen (ml, litros)</option><option value="unidad"' + (mide === 'unidad' ? ' selected' : '') + '>Por unidades</option></select></div></div><div class="card" style="background:var(--chip)"><b>Lo que compras de una vez</b><div class="two"><div><label>Cantidad</label><input id="mCant" type="number" inputmode="decimal" value="' + cant + '"></div><div><label>Medida</label><select id="mCompraU">' + opcionesCompra(mide, compraU) + '</select></div></div><label>Lo que pagas por esa cantidad ($)</label><input id="mCosto" type="number" inputmode="decimal" value="' + i.costoTotal + '"><div id="mPrev" style="margin-top:8px"></div></div>' + (usos.length ? '<p class="hint">Lo usan: ' + esc(usos.join(', ')) + '. Si cambias cómo se mide, revisa esas recetas.</p>' : '') + '<label>Stock mínimo (en ' + (mide === 'peso' ? 'gramos' : (mide === 'volumen' ? 'ml' : 'unidades')) + ', para los avisos de compra)</label><input id="mMin" type="number" inputmode="decimal" value="' + (i.stockMin || 0) + '"><div style="height:12px"></div><button class="btn pri block" data-act="guardarInsumo">Guardar</button><div style="height:8px"></div>' + (i.id ? '<button class="btn danger block" data-act="archivarX" data-t="insumo" data-id="' + i.id + '" data-a="' + (i.activo ? '0' : '1') + '">' + (i.activo ? 'Archivar' : 'Reactivar') + '</button><div style="height:8px"></div>' : '') + '<button class="btn block" data-act="cerrarModal">Cancelar</button>');
+  previewInsumo();
+}
+
+function leerInsumoModal() {
+  var mide = $('#mMide').value, sel = $('#mCompraU'), f = +sel.options[sel.selectedIndex].getAttribute('data-f') || 1;
+  var unidad = mide === 'peso' ? 'g' : (mide === 'volumen' ? 'ml' : 'unidad');
+  return { unidad: unidad, cantidad: num($('#mCant').value) * f, costoTotal: num($('#mCosto').value), mide: mide };
+}
+
+function previewInsumo() {
+  var el = $('#mPrev');
+  if (!el || !$('#mMide')) { return; }
+  var d = leerInsumoModal();
+  if (!(d.cantidad > 0)) { el.innerHTML = '<span class="muted">Escribe cuánto compras de una vez.</span>'; return; }
+  var tmp = { unidad: d.unidad, costoUnidad: d.costoTotal / d.cantidad }, pa = precioAmigable(tmp), por = d.unidad === 'unidad' ? 'unidad' : (d.unidad === 'g' ? 'gramo' : 'ml');
+  var h = '<div>Eso equivale a <b>' + fmt(pa.v) + ' por ' + pa.por + '</b>' + (d.unidad !== 'unidad' ? ' (' + fmt2(tmp.costoUnidad) + ' por ' + por + ')' : '') + '.</div>';
+  if (S.edit && S.edit.antes) { h += '<div class="muted">Antes: ' + fmt(S.edit.antes.v) + ' por ' + S.edit.antes.por + '.</div>'; }
+  if (insumoRaro(tmp)) { h += '<div class="neg" style="margin-top:4px"><b>Parece un error:</b> son ' + fmt(pa.v) + ' por ' + pa.por + '. ¿Escribiste el precio de un kilo, un litro o una unidad con la cantidad en 1? Pon la cantidad real y elige la medida (por ejemplo 1 kilos).</div>'; }
+  if (S.edit && S.edit.miUnidad && S.edit.id && d.unidad !== S.edit.miUnidad) { h += '<div class="neg" style="margin-top:4px">Cambiaste la unidad de ' + esc(S.edit.miUnidad) + ' a ' + esc(d.unidad) + '. Las recetas que lo usan tendrán que reescribirse.</div>'; }
+  el.innerHTML = h;
+}
+
+function modalDetalle(pid) {
+  var p = null;
+  S.cat.productos.forEach(function (x) { if (x.id === pid) { p = x; } });
+  if (!p) { return; }
+  var um = unidadMapa(), insPorId = {}, salPorId = {};
+  S.cat.insumos.forEach(function (x) { insPorId[x.id] = x; });
+  S.cat.salsas.forEach(function (x) { salPorId[x.id] = x; });
+  var filas = (S.cat.recetas[pid] || []).map(function (l) {
+    var i = insPorId[l.ref], sv = salPorId[l.ref], cu = um[l.ref] || 0;
+    return { ref: l.ref, nombre: i ? i.nombre : (sv ? sv.nombre + ' (salsa)' : l.ref), unidad: i ? i.unidad : (sv ? sv.unidad : ''), cant: +l.cant || 0, cu: cu, sub: (+l.cant || 0) * cu, esIns: !!i, raro: i ? insumoRaro(i) : false };
+  }).sort(function (a, b) { return b.sub - a.sub; });
+  var tot = filas.reduce(function (a, f) { return a + f.sub; }, 0);
+  var h = '<h2>' + esc(p.nombre) + '</h2><p class="hint">Así se calcula cada número del costo. Toca “Corregir” en un ingrediente si su precio está mal.</p>';
+  h += '<h3>1. Materiales (la receta)</h3>';
+  if (!filas.length) { h += '<p class="muted">Este producto no tiene receta.</p>'; }
+  filas.forEach(function (f) {
+    h += '<div class="item" style="align-items:flex-start"><div class="grow"><div class="t">' + esc(f.nombre) + (f.raro ? ' <span class="pill bad">¿error?</span>' : '') + '</div><div class="s">' + String(Math.round(f.cant * 100) / 100).replace('.', ',') + ' ' + esc(f.unidad) + ' × ' + fmt2(f.cu) + ' por ' + esc(f.unidad) + ' · ' + pct(tot > 0 ? f.sub / tot : 0) + ' del costo</div></div><div class="r"><b>' + fmt(f.sub) + '</b>' + (f.esIns ? '<div style="margin-top:4px"><button class="btn sm" data-act="editInsumoDet" data-id="' + f.ref + '">Corregir</button></div>' : '') + '</div></div>';
+  });
+  h += '<div class="row sp" style="padding:10px 0;border-top:2px solid var(--line)"><b>Total materiales</b><b>' + fmt(tot) + '</b></div>';
+  h += '<h3 style="margin-top:14px">2. Mano de obra</h3><p style="margin:0">' + p.minutos + ' minutos de preparación × ' + fmt2(S.cat.moMinuto) + ' por minuto = <b>' + fmt(p.mo) + '</b></p><p class="hint" style="margin:4px 0 0">El minuto sale del salario mínimo: ' + fmt(S.cat.params.smmlv) + ' ÷ ' + S.cat.params.divisor + ' horas ÷ 60 (se cambia en Ajustes).</p>';
+  h += '<h3 style="margin-top:14px">3. CIF (gastos fijos)</h3><p style="margin:0">' + fmt(p.precio) + ' (precio) × ' + fmt(S.cat.fijosTotal) + ' (gastos fijos del mes) ÷ ' + fmt(S.cat.ventasEsp) + ' (ventas esperadas del mes) = <b>' + fmt(p.cif) + '</b></p><p class="hint" style="margin:4px 0 0">Los gastos fijos se reparten entre los productos según lo que vende cada uno.</p>';
+  h += '<div class="card" style="margin-top:14px"><div class="row sp"><span>Costo real (1 + 2 + 3)</span><b>' + fmt(p.costo) + '</b></div><div class="row sp"><span>Precio de venta</span><b>' + fmt(p.precio) + '</b></div><div class="row sp"><span>Queda</span><b class="' + (p.queda >= 0 ? 'pos' : 'neg') + '">' + fmt(p.queda) + ' (' + pct(p.precio > 0 ? p.queda / p.precio : 0) + ')</b></div><div class="row sp"><span>Deja para gastos fijos (precio − materiales − mano de obra)</span><b>' + fmt(p.deja) + '</b></div></div>';
+  h += '<button class="btn pri block" data-act="editProductoDet" data-id="' + pid + '">Editar la receta</button><div style="height:8px"></div><button class="btn block" data-act="cerrarModal">Cerrar</button>';
+  abrirModal(h);
+}
+
+function opcionesRef(permiteSalsas, sel) {
+  var h = '<option value="">Elige un ingrediente</option><optgroup label="Insumos">';
+  S.cat.insumos.filter(function (i) { return i.activo || i.id === sel; }).forEach(function (i) { h += '<option value="' + i.id + '"' + (i.id === sel ? ' selected' : '') + '>' + esc(i.nombre) + ' (' + esc(i.unidad) + ')</option>'; });
+  h += '</optgroup>';
+  if (permiteSalsas) {
+    h += '<optgroup label="Salsas y preparaciones">';
+    S.cat.salsas.filter(function (s) { return s.activo || s.id === sel; }).forEach(function (s) { h += '<option value="' + s.id + '"' + (s.id === sel ? ' selected' : '') + '>' + esc(s.nombre) + ' (' + esc(s.unidad) + ')</option>'; });
+    h += '</optgroup>';
+  }
+  return h;
+}
+
+function resumenLineas() {
+  var e = S.edit, ps = e.tipo === 'producto', um = unidadMapa(), tot = 0;
+  e.lineas.forEach(function (l, i) {
+    var sub = (um[l.ref] || 0) * num(l.cant);
+    tot += sub;
+    var el = $('#ls' + i);
+    if (el) { el.textContent = fmt(sub); }
+  });
+  var res = 'Costo de los ingredientes: <b>' + fmt(tot) + '</b>';
+  if (ps) {
+    var mo = num($('#mMin') ? $('#mMin').value : 0) * S.cat.moMinuto, precio = num($('#mPrecio') ? $('#mPrecio').value : 0);
+    res += ' · mano de obra ' + fmt(mo) + ' · costo ' + fmt(tot + mo) + ' · queda <b class="' + (precio - tot - mo >= 0 ? 'pos' : 'neg') + '">' + fmt(precio - tot - mo) + '</b>';
+  } else {
+    var rinde = num($('#mRinde') ? $('#mRinde').value : 0);
+    res += rinde > 0 ? ' · ' + fmt2(tot / rinde) + ' por unidad' : '';
+  }
+  $('#resLineas').innerHTML = res;
+}
+
+function pintarLineas() {
+  var e = S.edit, ps = e.tipo === 'producto';
+  var h = e.lineas.map(function (l, i) {
+    return '<div style="border-bottom:1px solid var(--line);padding:6px 0"><select data-l="' + i + ':ref">' + opcionesRef(ps, l.ref) + '</select><div class="row" style="margin-top:6px"><input type="number" inputmode="decimal" data-l="' + i + ':cant" value="' + (l.cant === '' ? '' : l.cant) + '" placeholder="Cantidad" style="flex:1"><span class="muted" id="ls' + i + '"></span><button class="btn danger sm" data-act="delLinea" data-i="' + i + '">Quitar</button></div></div>';
+  }).join('');
+  if (!e.lineas.length) { h = '<p class="hint">Sin ingredientes todavía.</p>'; }
+  $('#lineas').innerHTML = h;
+  resumenLineas();
+}
+
+function modalFijo(id) {
+  var x = null;
+  S.cat.fijos.forEach(function (f) { if (f.id === id) { x = f; } });
+  x = x || { id: '', nombre: '', valor: 0, frecuencia: 'Mensual', dia: 1, activo: true };
+  S.edit = { tipo: 'fijo', id: x.id };
+  var sem = x.frecuencia === 'Semanal';
+  abrirModal('<h2>' + (x.id ? 'Editar gasto fijo' : 'Nuevo gasto fijo') + '</h2><label>Nombre</label><input id="mNombre" type="text" value="' + esc(x.nombre) + '"><div class="two"><div><label>Valor de cada pago ($)</label><input id="mValor" type="number" inputmode="decimal" value="' + x.valor + '"></div><div><label>¿Cada cuánto se paga?</label><select id="mFrec"><option value="Mensual"' + (sem ? '' : ' selected') + '>Una vez al mes</option><option value="Semanal"' + (sem ? ' selected' : '') + '>Cada semana</option></select></div></div><div class="two"><div><label>Día del mes (si es mensual)</label><input id="mDia" type="number" inputmode="numeric" value="' + (sem ? 1 : x.dia) + '"></div><div><label>Día de la semana (si es semanal)</label><select id="mDow">' + DIAS_L.map(function (n, i) { return '<option value="' + i + '"' + (sem && x.dia === i ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select></div></div><div style="height:12px"></div><button class="btn pri block" data-act="guardarFijo">Guardar</button><div style="height:8px"></div>' + (x.id ? '<button class="btn danger block" data-act="archivarX" data-t="fijo" data-id="' + x.id + '" data-a="' + (x.activo ? '0' : '1') + '">' + (x.activo ? 'Archivar' : 'Reactivar') + '</button><div style="height:8px"></div>' : '') + '<button class="btn block" data-act="cerrarModal">Cancelar</button>');
+}
+
+function modalSalsa(id) {
+  var s = null;
+  S.cat.salsas.forEach(function (x) { if (x.id === id) { s = x; } });
+  s = s || { id: '', nombre: '', rinde: 1000, unidad: 'g', activo: true };
+  S.edit = { tipo: 'salsa', id: s.id, lineas: (S.cat.recetas[s.id] || []).map(function (l) { return { ref: l.ref, cant: l.cant }; }) };
+  abrirModal('<h2>' + (s.id ? 'Editar salsa' : 'Nueva salsa') + '</h2><label>Nombre</label><input id="mNombre" type="text" value="' + esc(s.nombre) + '"><div class="two"><div><label>Cuánto rinde la receta</label><input id="mRinde" type="number" inputmode="decimal" value="' + s.rinde + '"></div><div><label>Unidad (g, ml)</label><input id="mUnidad" type="text" value="' + esc(s.unidad) + '"></div></div><h3 style="margin-top:14px">Ingredientes de la receta</h3><div id="lineas"></div><button class="btn sm" data-act="addLinea">+ Agregar ingrediente</button><p id="resLineas" class="hint"></p><button class="btn pri block" data-act="guardarSalsa">Guardar</button><div style="height:8px"></div>' + (s.id ? '<button class="btn danger block" data-act="archivarX" data-t="salsa" data-id="' + s.id + '" data-a="' + (s.activo ? '0' : '1') + '">' + (s.activo ? 'Archivar' : 'Reactivar') + '</button><div style="height:8px"></div>' : '') + '<button class="btn block" data-act="cerrarModal">Cancelar</button>');
+  pintarLineas();
+}
+
+function modalProducto(id) {
+  var p = null;
+  S.cat.productos.forEach(function (x) { if (x.id === id) { p = x; } });
+  p = p || { id: '', nombre: '', precio: 0, sugerido: 0, minutos: 5, esperadas: 0, activo: true };
+  S.edit = { tipo: 'producto', id: p.id, lineas: (S.cat.recetas[p.id] || []).map(function (l) { return { ref: l.ref, cant: l.cant }; }) };
+  abrirModal('<h2>' + (p.id ? 'Editar producto' : 'Nuevo producto') + '</h2><label>Nombre</label><input id="mNombre" type="text" value="' + esc(p.nombre) + '"><div class="two"><div><label>Precio de venta ($)</label><input id="mPrecio" type="number" inputmode="decimal" value="' + p.precio + '"></div><div><label>Precio sugerido ($)</label><input id="mSug" type="number" inputmode="decimal" value="' + p.sugerido + '"></div></div><div class="two"><div><label>Minutos de preparación</label><input id="mMin" type="number" inputmode="decimal" value="' + p.minutos + '"></div><div><label>Unidades esperadas al mes</label><input id="mEsp" type="number" inputmode="numeric" value="' + p.esperadas + '"></div></div><h3 style="margin-top:14px">Receta (por unidad)</h3><div id="lineas"></div><button class="btn sm" data-act="addLinea">+ Agregar ingrediente</button><p id="resLineas" class="hint"></p><button class="btn pri block" data-act="guardarProducto">Guardar</button><div style="height:8px"></div>' + (p.id ? '<button class="btn danger block" data-act="archivarX" data-t="producto" data-id="' + p.id + '" data-a="' + (p.activo ? '0' : '1') + '">' + (p.activo ? 'Archivar' : 'Reactivar') + '</button><div style="height:8px"></div>' : '') + '<button class="btn block" data-act="cerrarModal">Cancelar</button>');
+  pintarLineas();
+}
+
+function confirmarPregunta(texto, reintentar, siTxt, noTxt) {
+  S.reintento = reintentar;
+  $('#modal2').innerHTML = '<div class="modalbg" style="z-index:40"><div class="modal"><h2>Un momento</h2><p>' + esc(texto) + '</p><button class="btn pri block" data-act="siForzar">' + esc(siTxt || 'Sí, guardar de todos modos') + '</button><div style="height:8px"></div><button class="btn block" data-act="noForzar">' + esc(noTxt || 'No, volver y cambiar el nombre') + '</button></div></div>';
+}
+
+function enviarCatalogo(fn, item, forzar) {
+  return api(fn, [item, !!forzar]).then(function (r) {
+    if (r && r.pregunta) { confirmarPregunta(r.pregunta, function () { return enviarCatalogo(fn, item, true); }); return; }
+    cerrarModal();
+    return recargarCat().then(function () { toast('Guardado'); repintar(); });
+  }).catch(manejarError);
+}
+
+function vistaCosteo() {
+  var c = S.cat, p = c.params, ym = S.ym;
+  var ventas = 0, mp = 0, mo = 0;
+  c.productos.forEach(function (x) { if (x.activo) { ventas += x.esperadas * x.precio; mp += x.esperadas * x.mp; mo += x.esperadas * x.mo; } });
+  var deja = ventas - mp - mo, fijos = c.fijosTotal;
+  var pagoAux = turnosAuxMes(ym) * p.turnoAux, auxNo = pagoAux - mo, domi = turnosDomiMes(ym) * p.turnoDomi;
+  var util = deja - fijos - auxNo - domi;
+  var h = htmlAlertasDatos() + '<h2>Costeo por producto</h2><p class="hint">Costo real = materiales (la receta) + mano de obra (minutos de proceso × ' + fmt2(c.moMinuto) + ' por minuto, al salario mínimo) + CIF (los gastos fijos, ' + fmt(fijos) + ' al mes, repartidos según lo que vende cada producto).</p>';
+  h += '<div class="card"><h3>Resumen de ' + esc(tituloMes(ym)) + ' con tus ventas esperadas</h3><table><tbody>';
+  h += '<tr><td>Ventas esperadas</td><td>' + fmt(ventas) + '</td></tr><tr><td>(−) Materiales</td><td>' + fmt(mp) + '</td></tr><tr><td>(−) Mano de obra de las recetas</td><td>' + fmt(mo) + '</td></tr>';
+  h += '<tr class="tot"><td>Deja para gastos fijos</td><td>' + fmt(deja) + '</td></tr><tr><td>(−) Gastos fijos (CIF)</td><td>' + fmt(fijos) + '</td></tr>';
+  h += '<tr><td>(−) Pago de la auxiliar que las recetas no cubren (' + turnosAuxMes(ym) + ' turnos)</td><td>' + fmt(auxNo) + '</td></tr><tr><td>(−) Domiciliario (' + turnosDomiMes(ym) + ' turnos)</td><td>' + fmt(domi) + '</td></tr>';
+  h += '<tr class="tot"><td>Utilidad estimada del mes</td><td class="' + (util >= 0 ? 'pos' : 'neg') + '">' + fmt(util) + '</td></tr></tbody></table>';
+  h += '<p class="hint" style="margin-bottom:0">Usa las unidades esperadas de cada producto y los turnos normales de Ajustes. El bono de domicilios no se cuenta porque se paga completo a quien lleva el domicilio.</p></div>';
+  c.productos.filter(function (x) { return x.activo; }).forEach(function (x) {
+    h += '<div class="card"><div class="row sp"><b>' + esc(x.nombre) + '</b><b>' + fmt(x.precio) + '</b></div><table><tbody>';
+    h += '<tr><td>Materiales</td><td>' + fmt(x.mp) + '</td></tr><tr><td>Mano de obra (' + x.minutos + ' min)</td><td>' + fmt(x.mo) + '</td></tr><tr><td>CIF asignado</td><td>' + fmt(x.cif) + '</td></tr>';
+    h += '<tr class="tot"><td>Costo real</td><td>' + fmt(x.costo) + '</td></tr><tr class="tot"><td>Queda</td><td class="' + (x.queda >= 0 ? 'pos' : 'neg') + '">' + fmt(x.queda) + ' (' + pct(x.precio > 0 ? x.queda / x.precio : 0) + ')</td></tr></tbody></table>';
+    h += '<p class="hint" style="margin:8px 0 0">Deja <b>' + fmt(x.deja) + '</b> por unidad para pagar los gastos fijos' + (x.esperadas > 0 ? ' · con ' + x.esperadas + ' al mes aporta <b>' + fmt(x.deja * x.esperadas) + '</b>' : '') + '.' + (x.sugerido > 0 ? ' Con el precio sugerido (' + fmt(x.sugerido) + ') dejaría <b>' + fmt(x.sugerido - x.mp - x.mo) + '</b>.' : '') + '</p><button class="btn sm" data-act="detalle" data-id="' + x.id + '" style="margin-top:8px">Cómo se calcula</button></div>';
+  });
+  var a = agregar(S.mes || { dias: [] });
+  h += tarjetaMO(a, ym);
+  var dias = S.mes ? S.mes.dias : [];
+  h += '<div class="card tw"><h3>Mano de obra por día en ' + esc(tituloMes(ym)) + '</h3><table><thead><tr><th>Día</th><th>Recetas</th><th>Auxiliar</th><th>Diferencia</th></tr></thead><tbody>';
+  if (!dias.length) { h += '<tr><td colspan="4" class="muted">Sin días registrados.</td></tr>'; }
+  dias.forEach(function (d) { var df = d.mo - d.pagoAux; h += '<tr><td>' + d.fecha.slice(8) + '</td><td>' + fmt(d.mo) + '</td><td>' + fmt(d.pagoAux) + '</td><td class="' + (df >= 0 ? 'pos' : 'neg') + '">' + fmt(df) + '</td></tr>'; });
+  return h + '</tbody></table></div>';
+}
+
+function vistaAjustes() {
+  var p = S.cat.params;
+  var h = '<h2>Ajustes</h2><div class="card"><h3>Pagos y mano de obra</h3>';
+  h += '<div class="two"><div><label>Turno de la auxiliar de cocina ($)</label><input id="aTurnoAux" type="number" inputmode="decimal" value="' + p.turnoAux + '"></div><div><label>Turno del domiciliario ($)</label><input id="aTurnoDomi" type="number" inputmode="decimal" value="' + p.turnoDomi + '"></div></div>';
+  h += '<div class="two"><div><label>Bono de domicilios (%)</label><input id="aBono" type="number" inputmode="decimal" value="' + p.bonoDomiciliosPct + '"></div><div><label>Administrador al mes ($)</label><input id="aAdmin" type="number" inputmode="decimal" value="' + p.adminMensual + '"></div></div>';
+  h += '<div class="two"><div><label>Salario mínimo ($)</label><input id="aSmmlv" type="number" inputmode="decimal" value="' + p.smmlv + '"></div><div><label>Horas del mes (divisor)</label><input id="aDiv" type="number" inputmode="decimal" value="' + p.divisor + '"></div></div>';
+  h += '<label>Valor fijo por minuto de mano de obra (0 = usar el salario mínimo)</label><input id="aMoMan" type="number" inputmode="decimal" value="' + p.moMinutoManual + '"><p class="hint">Hoy cada minuto vale ' + fmt2(S.cat.moMinuto) + '.</p></div>';
+  h += '<div class="card"><h3>Turnos normales por día de la semana</h3><p class="hint">Sirven para llenar solos los turnos al abrir un día nuevo.</p><div class="tw"><table><thead><tr><th></th>' + ['D', 'L', 'M', 'M', 'J', 'V', 'S'].map(function (x) { return '<th>' + x + '</th>'; }).join('') + '</tr></thead><tbody><tr><td>Auxiliar</td>' + p.turnosAux.map(function (v, i) { return '<td><input type="number" style="width:46px;padding:6px 2px;text-align:center" data-tx="aux:' + i + '" value="' + v + '"></td>'; }).join('') + '</tr><tr><td>Domiciliario</td>' + p.turnosDomi.map(function (v, i) { return '<td><input type="number" style="width:46px;padding:6px 2px;text-align:center" data-tx="domi:' + i + '" value="' + v + '"></td>'; }).join('') + '</tr></tbody></table></div></div>';
+  h += '<div class="card"><h3>Caja y operación</h3><div class="two"><div><label>Base de caja por defecto ($)</label><input id="aBase" type="number" inputmode="decimal" value="' + p.baseCaja + '"></div><div><label>Costo de bebidas y otras ventas (% de la venta)</label><input id="aExtra" type="number" inputmode="decimal" value="' + p.costoExtraPct + '"></div></div><div class="two"><div><label>Hora en que cambia el día (0 a 23)</label><input id="aHora" type="number" inputmode="numeric" value="' + p.horaCambioDia + '"></div><div><label>Días de operación al mes</label><input id="aDias" type="number" inputmode="numeric" value="' + p.diasOperacion + '"></div></div><p class="hint">Si cierras después de medianoche, la hora de cambio de día hace que esas ventas cuenten en el día anterior (por ejemplo 4 = el día cambia a las 4:00 a. m.).</p></div>';
+  h += '<button class="btn pri block" data-act="guardarParams">Guardar ajustes</button><div style="height:16px"></div>';
+  h += '<div class="card"><h3>Conexión con la caja</h3><div id="cajaBox">' + htmlCajaAjustes() + '</div></div><div style="height:16px"></div>';
+  h += '<div class="card"><h3>Ventas históricas del año (Excel)</h3><div id="histBox">' + htmlHistorico() + '</div></div><div style="height:16px"></div>';
+  if (!S.hist && !S.histCargando) { setTimeout(cargarEstadoHist, 0); }
+  if (!S.cajaEst && !S.cajaCargando) { setTimeout(cargarEstadoCaja, 0); }
+  h += '<div class="card"><h3>Cambiar clave</h3><label>Clave actual</label><input id="kActual" type="password" autocomplete="current-password"><label>Clave nueva (mínimo 6 caracteres)</label><input id="kNueva" type="password" autocomplete="new-password"><div style="height:10px"></div><button class="btn block" data-act="cambiarClave">Cambiar clave</button></div>';
+  h += '<button class="btn danger block" data-act="salir">Salir</button>';
+  return h;
+}
+
+function leerParams() {
+  var t = { aux: [], domi: [] };
+  $$('[data-tx]').forEach(function (el) { var p = el.getAttribute('data-tx').split(':'); t[p[0]][+p[1]] = Math.max(0, Math.round(num(el.value))); });
+  return { turnoAux: num($('#aTurnoAux').value), turnoDomi: num($('#aTurnoDomi').value), bonoDomiciliosPct: num($('#aBono').value), adminMensual: num($('#aAdmin').value), smmlv: num($('#aSmmlv').value), divisor: num($('#aDiv').value), moMinutoManual: num($('#aMoMan').value), baseCaja: num($('#aBase').value), costoExtraPct: num($('#aExtra').value), horaCambioDia: num($('#aHora').value), diasOperacion: num($('#aDias').value), turnosAux: t.aux, turnosDomi: t.domi };
+}
+
+function leerLineas() { return S.edit.lineas.filter(function (l) { return l.ref; }).map(function (l) { return { ref: l.ref, cant: num(l.cant) }; }); }
+
+document.addEventListener('click', function (ev) {
+  var t = ev.target.closest('[data-act],[data-tab]');
+  if (!t) { return; }
+  if (t.getAttribute('data-tab')) { guardarPendiente(); irA(t.getAttribute('data-tab')); return; }
+  var a = t.getAttribute('data-act');
+  var accion = {
+    reintentar: function () { iniciar(); },
+    entrar: function () { var v = $('#lc').value; api('entrar', [v]).then(function (r) { S.token = r.token; guardarTok(r.token); return cargarInicial(); }).catch(function (e) { toast(e.message); }); },
+    crear: function () { var a1 = $('#c1').value, a2 = $('#c2').value; if (a1 !== a2) { toast('Las dos claves no coinciden.'); return; } api('crearClave', [a1]).then(function (r) { S.token = r.token; guardarTok(r.token); S.est.tieneClave = true; return cargarInicial(); }).catch(function (e) { toast(e.message); }); },
+    salir: function () { S.token = null; S.hMes = ''; S.hCols = null; S.hPrevProd = null; S.hist = null; S.histPrev = null; S.sync = null; S.cajaEst = null; S.pf = null; S.cat = null; S.dia = null; guardarTok(''); pantallaLogin(''); },
+    mprev: function () { cargarMes(mesMas(S.ym, -1)).then(repintar).catch(manejarError); },
+    mnext: function () { cargarMes(mesMas(S.ym, 1)).then(repintar).catch(manejarError); },
+    irHoy: function () { abrirDia(hoyNeg()); },
+    pickDay: function () { abrirDia(t.getAttribute('data-date')); },
+    dmprev: function () { var f = S.dia.fecha, ym = mesMas(f.slice(0, 7), -1); abrirDia(ym + '-' + (ym === hoyNeg().slice(0, 7) ? hoyNeg().slice(8) : '01')); },
+    dmnext: function () { var f = S.dia.fecha, ym = mesMas(f.slice(0, 7), 1); abrirDia(ym + '-' + (ym === hoyNeg().slice(0, 7) ? hoyNeg().slice(8) : '01')); },
+    menos: function () { var id = t.getAttribute('data-pid'), q = Math.max(0, Math.round(num(S.dia.u[id])) - 1); S.dia.u[id] = q; S.sucio = true; var el = $('[data-u="' + id + '"]'); if (el) { el.value = q || ''; } refrescarDia(); },
+    mas: function () { var id = t.getAttribute('data-pid'), q = Math.round(num(S.dia.u[id])) + 1; S.dia.u[id] = q; S.sucio = true; var el = $('[data-u="' + id + '"]'); if (el) { el.value = q; } refrescarDia(); },
+    turno: function () { var k = t.getAttribute('data-k'), d = +t.getAttribute('data-d'); S.dia[k] = Math.max(0, Math.round(num(S.dia[k])) + d); S.sucio = true; $(k === 'aux' ? '#tAux' : '#tDomi').textContent = S.dia[k]; refrescarDia(); },
+    addGasto: function () { S.dia.gastos.push({ categoria: S.cat.categoriasGasto[0], concepto: '', valor: 0, medio: 'Efectivo' }); S.sucio = true; var lg = $('#listaGastos'); lg.removeAttribute('data-ok'); refrescarDia(); },
+    delGasto: function () { S.dia.gastos.splice(+t.getAttribute('data-i'), 1); S.sucio = true; $('#listaGastos').removeAttribute('data-ok'); refrescarDia(); },
+    guardarDia: function () { guardarDia().catch(manejarError); },
+    cerrarDia: function () { cerrarDia(); },
+    reabrir: function () { var m = $('#dReabrir').value; api('reabrirDia', [S.dia.fecha, m]).then(function () { S.dia.estado = 'Abierto'; return cargarMes(S.dia.fecha.slice(0, 7)); }).then(function () { toast('Día reabierto'); $('#vista').innerHTML = vistaDia(); refrescarDia(); }).catch(manejarError); },
+    sub: function () { S.sub = t.getAttribute('data-v'); repintar(); },
+    nuevoInsumo: function () { modalInsumo(''); },
+    editInsumo: function () { modalInsumo(t.getAttribute('data-id')); },
+    editInsumoDet: function () { modalInsumo(t.getAttribute('data-id')); },
+    detalle: function () { modalDetalle(t.getAttribute('data-id')); },
+    editProductoDet: function () { modalProducto(t.getAttribute('data-id')); },
+    nuevaSalsa: function () { modalSalsa(''); },
+    editSalsa: function () { modalSalsa(t.getAttribute('data-id')); },
+    nuevoProducto: function () { modalProducto(''); },
+    traerCaja: function () { sincronizarAlAbrir(true); },
+    hLimpiar: function () { S.histTexto = ''; S.histNota = ''; S.histPrev = null; S.hPrevProd = null; S.hCols = null; $('#histBox').innerHTML = htmlHistorico(); },
+    hRevisar: function () {
+      S.histTexto = $('#hText').value; S.histNota = $('#hNota').value;
+      if (!S.histTexto.trim()) { toast('Pega primero las filas de tu Excel.'); return; }
+      var ym = ymHist();
+      if (S.hTipo === 'prod') {
+        api('previsualizarVentasProductos', [S.histTexto, ym]).then(function (r) {
+          S.hPrevProd = r; S.hCols = r.columnas.map(function (c) { return { clave: c.clave, encabezado: c.encabezado, unidades: c.unidades, productoId: c.productoId || '', precio: c.precio || 0, editado: c.origen === 'guardado' }; });
+          $('#histBox').innerHTML = htmlHistorico();
+        }).catch(manejarError);
+        return;
+      }
+      api('previsualizarHistorico', [S.histTexto, ym]).then(function (r) { S.histPrev = r; S.histPrevYm = ym; $('#histBox').innerHTML = htmlHistorico(); }).catch(manejarError);
+    },
+    hGuardar: function () {
+      S.histTexto = $('#hText').value; S.histNota = $('#hNota').value;
+      var ym = ymHist(), avanzar = function () { var sig = ''; if (S.hTipo !== 'fecha') { var n = +S.hMes + 1; if (n <= 12) { S.hMes = ('0' + n).slice(-2); sig = ' Ya quedó listo el mes siguiente.'; } } return sig; };
+      if (S.hTipo === 'prod') {
+        var cols = (S.hCols || []).map(function (c) { return { clave: c.clave, productoId: c.productoId, precio: +c.precio || 0 }; });
+        api('guardarVentasProductos', [S.histTexto, ym, cols, S.histNota]).then(function (r) {
+          S.hist = r.estado; S.hPrevProd = null; S.hCols = null; S.histTexto = ''; S.histNota = '';
+          var sig = avanzar(); $('#histBox').innerHTML = htmlHistorico();
+          toast('Guardé ' + r.resumen.dias + ' días de ' + nombreMesCorto(ym) + ' (' + fmt(r.resumen.total) + ').' + sig);
+        }).catch(manejarError);
+        return;
+      }
+      api('guardarHistorico', [S.histTexto, S.histNota, ym]).then(function (r) {
+        S.hist = r.estado; S.histPrev = null; S.histPrevYm = ''; S.histTexto = ''; S.histNota = '';
+        var sig = avanzar(); $('#histBox').innerHTML = htmlHistorico();
+        toast('Guardé ' + r.resumen.dias + ' días' + (ym ? ' de ' + nombreMesCorto(ym) : '') + (r.reemplazadas ? ' (' + r.reemplazadas + ' reemplazados)' : '') + '.' + sig);
+      }).catch(manejarError);
+    },
+    hBorrar: function () {
+      var l = t.getAttribute('data-id');
+      confirmarPregunta('Se borrarán los días de esa carga del histórico. No afecta la caja ni nada más.', function () { return api('borrarLoteHistorico', [l]).then(function (e) { S.hist = e; $('#histBox').innerHTML = htmlHistorico(); toast('Carga borrada'); }).catch(manejarError); }, 'Sí, borrar esa carga', 'No, dejarla');
+    },
+    reimportarDia: function () {
+      var f = S.dia.fecha;
+      confirmarPregunta('Se reemplazarán los datos de este día con los que hay en la caja. Lo que escribiste a mano en este día se perderá.', function () {
+        return api('reimportarDia', [f]).then(function () { return recargarCat(); }).then(function () { return cargarMes(S.ym); }).then(function () { return api('dia', [f]); }).then(function (d) { S.dia = borradorDe(d, f); S.sucio = false; delete S.pend[f]; repintar(); toast('Día traído de la caja'); }).catch(manejarError);
+      }, 'Sí, traerlo de la caja', 'No, dejarlo como está');
+    },
+    pfprev: function () { var p = pfMes().split('-'); var d = new Date(+p[0], +p[1] - 2, 1); S.pfYm = d.getFullYear() + '-' + pad(d.getMonth() + 1); S.pf = null; $('#pfBox').innerHTML = htmlPagosFijos(); cargarPagosFijos(); },
+    pfnext: function () { var p = pfMes().split('-'); var d = new Date(+p[0], +p[1], 1); S.pfYm = d.getFullYear() + '-' + pad(d.getMonth() + 1); S.pf = null; $('#pfBox').innerHTML = htmlPagosFijos(); cargarPagosFijos(); },
+    pagarFijo: function () { modalPagoFijo(t.getAttribute('data-id')); },
+    pagoTodoFijo: function () {
+      var id = t.getAttribute('data-id'), x = null;
+      (S.pf ? S.pf.items : []).forEach(function (i) { if (i.id === id) { x = i; } });
+      if (!x || !(x.pendiente > 0)) { return; }
+      api('registrarPagoFijo', [id, S.pf.ym, x.pendiente, S.fecha || ymd(new Date()), 'pago completo']).then(function (v) { S.pf = v; $('#pfBox').innerHTML = htmlPagosFijos(); toast('Marcado como pagado'); }).catch(manejarError);
+    },
+    guardarPagoFijo: function () {
+      var id = S.edit && S.edit.id, ym = S.pf ? S.pf.ym : pfMes(), v = pesos($('#pfValor').value);
+      if (!(v > 0)) { toast('Escribe cuánto pagaste.'); return; }
+      api('registrarPagoFijo', [id, ym, v, $('#pfFecha').value, $('#pfNota').value]).then(function (r) { cerrarModal(); S.pf = r; $('#pfBox').innerHTML = htmlPagosFijos(); toast('Pago guardado'); }).catch(manejarError);
+    },
+    borrarPagoFijo: function () {
+      ev.preventDefault();
+      api('borrarPagoFijo', [t.getAttribute('data-id'), pfMes()]).then(function (r) { S.pf = r; $('#pfBox').innerHTML = htmlPagosFijos(); toast('Pago borrado'); }).catch(manejarError);
+    },
+    nuevoFijo: function () { modalFijo(''); },
+    editFijo: function () { modalFijo(t.getAttribute('data-id')); },
+    guardarFijo: function () { var frec = $('#mFrec').value; var item = { id: S.edit.id, nombre: $('#mNombre').value, valor: num($('#mValor').value), frecuencia: frec, dia: frec === 'Semanal' ? num($('#mDow').value) : num($('#mDia').value), activo: true }; enviarCatalogo('guardarFijo', item, false); },
+    editProducto: function () { modalProducto(t.getAttribute('data-id')); },
+    cerrarModal: function () { cerrarModal(); },
+    addLinea: function () { S.edit.lineas.push({ ref: '', cant: '' }); pintarLineas(); },
+    delLinea: function () { S.edit.lineas.splice(+t.getAttribute('data-i'), 1); pintarLineas(); },
+    guardarInsumo: function () { var d = leerInsumoModal(); var item = { id: S.edit.id, nombre: $('#mNombre').value, tipo: $('#mTipo').value, unidad: d.unidad, cantidad: d.cantidad, costoTotal: d.costoTotal, stockMin: num($('#mMin').value), activo: true }; enviarCatalogo('guardarInsumo', item, false); },
+    guardarSalsa: function () { var item = { id: S.edit.id, nombre: $('#mNombre').value, rinde: num($('#mRinde').value), unidad: $('#mUnidad').value, lineas: leerLineas(), activo: true }; enviarCatalogo('guardarSalsa', item, false); },
+    guardarProducto: function () { var item = { id: S.edit.id, nombre: $('#mNombre').value, precio: num($('#mPrecio').value), sugerido: num($('#mSug').value), minutos: num($('#mMin').value), esperadas: num($('#mEsp').value), lineas: leerLineas(), activo: true }; enviarCatalogo('guardarProducto', item, false); },
+    archivarX: function () { api('archivar', [t.getAttribute('data-t'), t.getAttribute('data-id'), t.getAttribute('data-a') === '1']).then(function () { cerrarModal(); return recargarCat(); }).then(function () { toast('Listo'); repintar(); }).catch(manejarError); },
+    siForzar: function () { var f = S.reintento; $('#modal2').innerHTML = ''; f(); },
+    noForzar: function () { $('#modal2').innerHTML = ''; },
+    guardarParams: function () { api('guardarParams', [leerParams()]).then(function () { return recargarCat(); }).then(function () { toast('Ajustes guardados'); repintar(); }).catch(manejarError); },
+    cambiarClave: function () { api('cambiarClave', [$('#kActual').value, $('#kNueva').value]).then(function () { $('#kActual').value = ''; $('#kNueva').value = ''; toast('Clave cambiada'); }).catch(manejarError); }
+  }[a];
+  if (accion) { accion(); }
+});
+
+document.addEventListener('input', function (ev) {
+  var t = ev.target, d = S.dia;
+  if (t.getAttribute && t.getAttribute('data-hprecio')) {
+    var k2 = t.getAttribute('data-hprecio');
+    (S.hCols || []).forEach(function (c) { if (c.clave === k2) { c.precio = pesos(t.value); c.editado = true; } });
+    var tp = $('#hTotalPesos'); if (tp) { tp.textContent = fmt(totalPesosCols()); }
+    var wf = document.getElementById('falta_' + k2); if (wf) { wf.style.display = pesos(t.value) > 0 ? 'none' : ''; }
+    return;
+  }
+  if (t.id === 'hText') { S.histTexto = t.value; return; }
+  if (t.id === 'hNota') { S.histNota = t.value; return; }
+  if (t.id === 'mCant' || t.id === 'mCosto') { previewInsumo(); return; }
+  if (t.getAttribute('data-u') && d) { d.u[t.getAttribute('data-u')] = Math.max(0, Math.round(num(t.value))); S.sucio = true; refrescarDia(); }
+  else if (t.id === 'dExtra' && d) { d.extra = num(t.value); S.sucio = true; refrescarDia(); }
+  else if (t.id === 'dDom' && d) { d.dom = num(t.value); S.sucio = true; refrescarDia(); }
+  else if (t.id === 'dDigital' && d) { d.digital = num(t.value); S.sucio = true; refrescarDia(); }
+  else if (t.id === 'dBase' && d) { d.base = num(t.value); S.sucio = true; refrescarDia(); }
+  else if (t.id === 'dNota' && d) { d.nota = t.value; S.sucio = true; }
+  else if (t.id === 'dContado' && d) { d.contado = t.value === '' ? null : num(t.value); S.sucio = true; refrescarDia(); }
+  else if (t.id === 'dMotivo' && d) { d.motivo = t.value; S.sucio = true; }
+  else if (t.getAttribute('data-g') && d) { var p = t.getAttribute('data-g').split(':'); d.gastos[+p[0]][p[1]] = p[1] === 'valor' ? num(t.value) : t.value; S.sucio = true; refrescarDia(); }
+  else if (t.getAttribute('data-l') && S.edit) { var q = t.getAttribute('data-l').split(':'); if (q[1] === 'cant') { S.edit.lineas[+q[0]].cant = t.value; resumenLineas(); } }
+  else if ((t.id === 'mPrecio' || t.id === 'mMin' || t.id === 'mRinde') && S.edit && S.edit.lineas) { resumenLineas(); }
+});
+
+document.addEventListener('change', function (ev) {
+  var t = ev.target;
+  if (t.id === 'hTipo' || t.id === 'hMes' || t.id === 'hAnio') {
+    if ($('#hText')) { S.histTexto = $('#hText').value; }
+    if ($('#hNota')) { S.histNota = $('#hNota').value; }
+    if (t.id === 'hTipo') { S.hTipo = t.value; } else if (t.id === 'hMes') { S.hMes = t.value; } else { S.hAnio = t.value; }
+    S.histPrev = null; S.histPrevYm = ''; S.hPrevProd = null; S.hCols = null;
+    $('#histBox').innerHTML = htmlHistorico();
+    return;
+  }
+  if (t.getAttribute && t.getAttribute('data-hprod')) {
+    var cl = t.getAttribute('data-hprod'), pr = null;
+    (S.hCols || []).forEach(function (c) { if (c.clave === cl) { pr = c; } });
+    if (pr) {
+      pr.productoId = t.value;
+      var prod = null; ((S.hPrevProd || {}).productos || []).forEach(function (x) { if (x.id === t.value) { prod = x; } });
+      if (prod && !pr.editado) { pr.precio = prod.precio; }
+      $('#histBox').innerHTML = htmlHistorico();
+    }
+    return;
+  }
+  if (t.getAttribute && t.getAttribute('data-sync')) {
+    var o = {}; o[t.getAttribute('data-sync')] = t.checked;
+    api('guardarSyncCfg', [o]).then(function (a) { if (S.cajaEst) { S.cajaEst.auto = a; } toast('Guardado'); }).catch(manejarError);
+    return;
+  }
+  if (t.getAttribute && t.getAttribute('data-eq')) {
+    api('guardarEquivalencia', [t.getAttribute('data-eq'), t.getAttribute('data-id'), t.value]).then(function (e) { S.cajaEst = e; var el = $('#cajaBox'); if (el) { el.innerHTML = htmlCajaAjustes(); } toast('Pareja guardada. Trayendo de la caja...'); return sincronizarAlAbrir(true); }).catch(manejarError);
+    return;
+  }
+  if (t.id === 'mMide') { var m = t.value; $('#mCompraU').innerHTML = opcionesCompra(m, m === 'peso' ? 'kg' : (m === 'volumen' ? 'l' : 'und')); previewInsumo(); return; }
+  if (t.id === 'mCompraU') { previewInsumo(); return; }
+  if (t.getAttribute('data-pm')) {
+    api('actualizarPrecio', [t.getAttribute('data-pm'), num(t.value)]).then(recargarCat).then(function () { toast('Precio actualizado: los costos se recalcularon'); repintar(); }).catch(manejarError);
+  } else if (t.getAttribute('data-l') && S.edit && t.getAttribute('data-l').split(':')[1] === 'ref') {
+    var p = t.getAttribute('data-l').split(':'); S.edit.lineas[+p[0]].ref = t.value; pintarLineas();
+  } else if (t.getAttribute('data-g') && S.dia) {
+    var q = t.getAttribute('data-g').split(':'); S.dia.gastos[+q[0]][q[1]] = t.value; S.sucio = true; refrescarDia();
+  }
+});
+
+setInterval(function () {
+  if (!S.token || !S.cat || S.sucio || $('#modal').innerHTML || $('#modal2').innerHTML) { return; }
+  if (document.visibilityState && document.visibilityState !== 'visible') { return; }
+  api('version', []).then(function (v) {
+    if (v !== S.ver) { return recargarCat().then(function () { return cargarMes(S.ym); }).then(function () { if (!S.sucio) { if (S.tab === 'dia') { abrirDia(S.dia ? S.dia.fecha : S.fecha); } else { repintar(); } } }); }
+  }).catch(function () {});
+}, 20000);
+
+iniciar();
+</script>
+<script>if ('serviceWorker' in navigator) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { }); }); }</script>
+</body>
+</html>
